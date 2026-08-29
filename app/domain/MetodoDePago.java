@@ -15,6 +15,7 @@ public class MetodoDePago {
 
     }
 
+
     public MetodoDePago(int idMetodoPago, String nombreMetodoPago, String descripcionMetodoPago) {
         this.idMetodoPago = idMetodoPago;
         this.nombreMetodoPago = nombreMetodoPago;
