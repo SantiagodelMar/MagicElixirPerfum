@@ -21,5 +21,5 @@ En la actualidad, la operación de Magic Elixir Parfum depende de procesos manua
 La logística y atención al cliente también carecen de automatización, aumentando el riesgo de retraso, guías pérdidas, sobrecostos en la operatividad del negocio y por ende pérdidas económicas. Asimismo, la carencia de un historial de ventas impide conocer el rendimiento de los productos, haciendo que se tomen decisiones comerciales sin pleno conocimiento y de forma intuitiva.
 
 ## Solución propuesta
-Como equipo Cesde proponemos construir un software que centralice la información de Magic Elixir Parfum. Con el sistema se podrá administrar el catálogo de perfumes, el inventario, registrar a clientes con sus respectivas direcciones de entrega o recolección directa en el local físico, registrar pedidos y llevar control de envíos.
+Como equipo Cesde proponemos construir un software que centralice la información de Magic Elixir Perfum. Con el sistema se podrá administrar el catálogo de perfumes, el inventario, registrar a clientes con sus respectivas direcciones de entrega o recolección directa en el local físico, registrar pedidos y llevar control de envíos.
 
