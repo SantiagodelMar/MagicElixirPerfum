@@ -1,6 +1,6 @@
 # MagicElixirPerfum
 
-## Proyecto integrador / Segundo semestre /Cesdce 2026-2
+## Proyecto integrador / Segundo semestre /Cesde 2026-2
 
 Sistema de gestión para Magic Elixir Perfum.
 
