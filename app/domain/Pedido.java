@@ -1,6 +1,8 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Pedido {
 
@@ -8,22 +10,37 @@ public class Pedido {
 
     private int idPedido;
     private Date fechaPedido;
+    private Cliente cliente;
     private double totalCostoPedido;
     private String observaciones;
+    private List <DetallePedido> detalles;
+    private EstadoPedido estadoPedido;
+    private MetodoDePago metodoPago;
+
 
     //Constructores
 
+    //CONSTRUCTOR VACÍO
+
     public Pedido() {
+        this.detalles = new ArrayList<>();
+        this.fechaPedido = new Date();
+        this.estadoPedido = EstadoPedido.PENDIENTE;
     }
 
-    public Pedido(int idPedido, Date fechaPedido, double totalCostoPedido, String observaciones) {
+    // CONSTRUCTOR CON PARÁMETROS INICIALES
+
+    public Pedido(int idPedido, Cliente cliente, MetodoDePago metodoPago, String observaciones) {
+        this(); // Ejecuta el constructor vacío para inicializar la lista, la fecha y el estado
         this.idPedido = idPedido;
-        this.fechaPedido = fechaPedido;
-        this.totalCostoPedido = totalCostoPedido;
+        this.cliente = cliente;
+        this.metodoPago = metodoPago;
         this.observaciones = observaciones;
     }
 
+
     //Getters and Setters
+
 
     public int getIdPedido() {
         return idPedido;
@@ -39,6 +56,14 @@ public class Pedido {
 
     public void setFechaPedido(Date fechaPedido) {
         this.fechaPedido = fechaPedido;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public double getTotalCostoPedido() {
@@ -57,33 +82,28 @@ public class Pedido {
         this.observaciones = observaciones;
     }
 
-
-
-    //Metodos
-
-    public void create(){
-
+    public List<DetallePedido> getDetalles() {
+        return detalles;
     }
 
-    public void agregarDetalle(){
-
+    public void setDetalles(List<DetallePedido> detalles) {
+        this.detalles = detalles;
     }
 
-    public void calcularTotal(){
-
+    public EstadoPedido getEstadoPedido() {
+        return estadoPedido;
     }
 
-    public void confirmarPedido(){
-
+    public void setEstadoPedido(EstadoPedido estadoPedido) {
+        this.estadoPedido = estadoPedido;
     }
 
-    public void cancelarPedido(){
-
+    public MetodoDePago getMetodoPago() {
+        return metodoPago;
     }
 
-    public void update(){
-
+    public void setMetodoPago(MetodoDePago metodoPago) {
+        this.metodoPago = metodoPago;
     }
-
 
 }//Fin public class

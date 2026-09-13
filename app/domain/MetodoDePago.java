@@ -1,59 +1,20 @@
 package domain;
 
-public class MetodoDePago {
+public enum MetodoDePago {
 
-    //Atributos
+    EFECTIVO("Pago contra entrega en efectivo"),
+    PSE("Pago por PSE"),
+    T_CREDITO("Pago con tarjeta de crédito"),
+    T_DEBITO("Pago con tarjeta de débito");
 
-    private int idMetodoPago;
-    private String nombreMetodoPago;
-    private String descripcionMetodoPago;
+    private final String descripcion;
 
-
-    //Constructores
-
-    public MetodoDePago() {
-
+    MetodoDePago(String descripcion){
+        this.descripcion = descripcion;
     }
 
-
-    public MetodoDePago(int idMetodoPago, String nombreMetodoPago, String descripcionMetodoPago) {
-        this.idMetodoPago = idMetodoPago;
-        this.nombreMetodoPago = nombreMetodoPago;
-        this.descripcionMetodoPago = descripcionMetodoPago;
+    public String getDescripcion(){
+        return descripcion;
     }
 
-    //Getters and Setters
-
-    public int getIdMetodoPago() {
-        return idMetodoPago;
-    }
-
-    public void setIdMetodoPago(int idMetodoPago) {
-        this.idMetodoPago = idMetodoPago;
-    }
-
-    public String getNombreMetodoPago() {
-        return nombreMetodoPago;
-    }
-
-    public void setNombreMetodoPago(String nombreMetodoPago) {
-        this.nombreMetodoPago = nombreMetodoPago;
-    }
-
-    public String getDescripcionMetodoPago() {
-        return descripcionMetodoPago;
-    }
-
-    public void setDescripcionMetodoPago(String descripcionMetodoPago) {
-        this.descripcionMetodoPago = descripcionMetodoPago;
-    }
-
-
-    //Metodos
-
-    public void validarPago(){
-
-    }
-
-
-}//Fin public class
+}//Fin public

@@ -1,59 +1,23 @@
 package domain;
 
-public class EstadoPedido {
+public enum EstadoPedido {
 
-    //Atributos
+    // 1. LAS CONSTANTES O VALORES PERMITIDOS
+    PENDIENTE("Pedido creado, pendiente de pago"),
+    PAGADO("Pago confirmado exitosamente, pendiente de envío"),
+    ENVIADO("En camino con el mensajero"),
+    ENTREGADO("Entregado al cliente"),
+    CANCELADO("Pedido cancelado");
 
-    private int idEstadoPedido;
-    private  String nombreEstadoPedido;
-    private String descripcionEstadoPedido;
+    // 2. ATRIBUTO PRIVADO E INMUTABLE
+    private final String descripcion;
 
-
-    //Constructores
-
-    public EstadoPedido() {
-
+    // 3. CONSTRUCTOR INTERNO DEL ENUM
+    EstadoPedido(String descripcion){
+        this.descripcion = descripcion;
     }
-
-    public EstadoPedido(int idEstadoPedido, String nombreEstadoPedido, String descripcionEstadoPedido) {
-        this.idEstadoPedido = idEstadoPedido;
-        this.nombreEstadoPedido = nombreEstadoPedido;
-        this.descripcionEstadoPedido = descripcionEstadoPedido;
+    // 4. MÉTOD GETTER (Para consultar el texto desde afuera)
+    public String getDescripcion() {
+        return descripcion;
     }
-
-    //Getters and Setters
-
-    public int getIdEstadoPedido() {
-        return idEstadoPedido;
-    }
-
-    public void setIdEstadoPedido(int idEstadoPedido) {
-        this.idEstadoPedido = idEstadoPedido;
-    }
-
-    public String getNombreEstadoPedido() {
-        return nombreEstadoPedido;
-    }
-
-    public void setNombreEstadoPedido(String nombreEstadoPedido) {
-        this.nombreEstadoPedido = nombreEstadoPedido;
-    }
-
-    public String getDescripcionEstadoPedido() {
-        return descripcionEstadoPedido;
-    }
-
-    public void setDescripcionEstadoPedido(String descripcionEstadoPedido) {
-        this.descripcionEstadoPedido = descripcionEstadoPedido;
-    }
-
-
-    //Metodos
-
-    public void cambiarEstado(){
-
-    }
-
-
-
-}//Fin public class
+}//Fin public enum
