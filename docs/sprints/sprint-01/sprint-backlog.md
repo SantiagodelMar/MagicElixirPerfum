@@ -24,3 +24,43 @@ Establecer la estructura base del proyecto y definir el Product Backlog completo
 ## Notas
 - Comenzó el 19 de septiembre de 2026
 - Estructura del repositorio reorganizada siguiendo Scrum + GitHub
+
+## Criterios de aceptación detallados
+
+### HU-03 — Registrar cliente
+✓ Acepta nombre, teléfono, correo válido
+✓ Guarda dirección (calle, barrio, ciudad, departamento)
+✓ Guarda usuario de Instagram
+✓ No permite duplicar teléfono
+✓ Muestra confirmación de cliente guardado
+
+### HU-04 — Registrar perfume
+✓ Solicita: nombre, marca, mililitros, precio, notas olfativas
+✓ Asigna categoría de lista (femenina, masculina, árabe fem, árabe masc)
+✓ Genera código único automático
+✓ Valida que precio sea positivo
+✓ Guarda el perfume en el sistema
+✓ Muestra confirmación
+
+### HU-07 — Ver cantidad disponible
+✓ Muestra lista de perfumes con stock actual
+✓ Actualiza automáticamente después de cada venta
+✓ Marca en rojo si stock es 0
+✓ Marca en amarillo si stock es bajo (< 3 unidades)
+✓ Permite filtrar por categoría
+
+### HU-09 — Crear pedido
+✓ Selecciona cliente (existente o nuevo)
+✓ Registra fecha y hora del pedido
+✓ Asigna ID único al pedido
+✓ Registra al vendedor que lo crea
+✓ Estado inicial: PENDIENTE
+✓ Guarda el pedido
+
+### HU-13 — Registrar envío
+✓ Selecciona transportadora (Coordinadora, Envía, etc.)
+✓ Ingresa número de guía
+✓ Confirma dirección de destino del cliente
+✓ Registra fecha de envío
+✓ Estado inicial del envío: EN PREPARACIÓN
+✓ Genera confirmación con detalles del envío
