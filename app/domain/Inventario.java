@@ -2,15 +2,13 @@ package domain;
 
 public class Inventario {
 
-    //Atributos
-
+    // Atributos
     private int idInventario;
     private Perfume perfume;
     private int stockDisponible;
     private String estadoDisponibilidad;
 
-    //Constructores
-
+    // Constructores
     public Inventario() {
     }
 
@@ -19,10 +17,10 @@ public class Inventario {
         this.perfume = perfume;
         this.stockDisponible = stockDisponible;
         this.estadoDisponibilidad = estadoDisponibilidad;
+        actualizarEstado();
     }
 
-    //Getters and Setters
-
+    // Getters and Setters
     public int getIdInventario() {
         return idInventario;
     }
@@ -45,6 +43,7 @@ public class Inventario {
 
     public void setStockDisponible(int stockDisponible) {
         this.stockDisponible = stockDisponible;
+        actualizarEstado();
     }
 
     public String getEstadoDisponibilidad() {
@@ -55,18 +54,31 @@ public class Inventario {
         this.estadoDisponibilidad = estadoDisponibilidad;
     }
 
-    //Metodos
-
-    public void actualizarStock(){
-
+    // Métodos
+    public void actualizarStock(int cantidad) {
+        if (this.stockDisponible + cantidad < 0) {
+            throw new IllegalArgumentException("Stock insuficiente.");
+        }
+        this.stockDisponible += cantidad;
+        actualizarEstado();
     }
 
-    public boolean verificarStockDisponibilidad(){
-        return false;
+    public boolean verificarStockDisponibilidad() {
+        return this.stockDisponible > 0;
     }
 
-    public void update(){
-
+    private void actualizarEstado() {
+        if (this.stockDisponible == 0) {
+            this.estadoDisponibilidad = "Agotado";
+        } else if (this.stockDisponible <= 5) {
+            this.estadoDisponibilidad = "Bajo Stock";
+        } else {
+            this.estadoDisponibilidad = "Disponible";
+        }
     }
 
-}//Fin public class
+    public void update() {
+        System.out.println("Inventario del perfume actualizado.");
+    }
+
+}// Fin public class
