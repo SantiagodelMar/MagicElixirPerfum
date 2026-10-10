@@ -32,4 +32,6 @@ public class App {
         // Imprimir comprobación
         Arrays.asList("Producto: " + detalle.getPerfume().getNombre() + " (" + detalle.getPerfume().getCategoria().getNombre() + ")", "Cantidad: " + detalle.getCantidad(), "Precio Unitario: $" + detalle.getPrecioUnitario(), "Subtotal: $" + detalle.getSubtotal(), "Estado Inicial: " + estado.getNombreEstado(), "Método de Pago: " + pago.getTipoPago(), "Stock en inventario: " + inventario.getStockDisponible() + " unidades (" + inventario.getEstadoDisponibilidad() + ")").forEach(System.out::println);
     }
+
+
 }
