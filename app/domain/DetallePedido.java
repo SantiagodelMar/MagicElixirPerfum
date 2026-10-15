@@ -10,19 +10,17 @@ public class DetallePedido {
     private double precioUnitario;
     private double subtotal;
 
-
     //Constructores
 
     public DetallePedido() {
-
     }
 
-    public DetallePedido(int idDetallePedido, Perfume perfume, int cantidad) {
+    public DetallePedido(int idDetallePedido, Perfume perfume, int cantidad, double precioUnitario, double subtotal) {
         this.idDetallePedido = idDetallePedido;
         this.perfume = perfume;
         this.cantidad = cantidad;
-        this.precioUnitario = (perfume!= null) ? perfume.getPrecio() : 0.0;
-        this.subtotal = calcularSubtotal();
+        this.precioUnitario = precioUnitario;
+        this.subtotal = subtotal;
     }
 
     //Getters and Setters
@@ -35,13 +33,20 @@ public class DetallePedido {
         this.idDetallePedido = idDetallePedido;
     }
 
+    public Perfume getPerfume() {
+        return perfume;
+    }
+
+    public void setPerfume(Perfume perfume) {
+        this.perfume = perfume;
+    }
+
     public int getCantidad() {
         return cantidad;
     }
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
-        this.subtotal = calcularSubtotal();
     }
 
     public double getPrecioUnitario() {
@@ -50,18 +55,14 @@ public class DetallePedido {
 
     public void setPrecioUnitario(double precioUnitario) {
         this.precioUnitario = precioUnitario;
-        this.subtotal = calcularSubtotal();
     }
 
     public double getSubtotal() {
         return subtotal;
     }
 
-    // NOTA: Se eliminó setSubtotal() para proteger la integridad de las cuentas.
-
-    // Métod de cálculo interno simple
-    public double calcularSubtotal() {
-        return this.precioUnitario * this.cantidad;
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
     }
 
-}//Fin public class
+}

@@ -1,11 +1,13 @@
-
 package domain;
+
+import domain.enums.EstadoOrdenCompra;
 
 import java.time.LocalDate;
 
 public class OrdenCompra {
 
-    // Atributos
+    //Atributos
+
     private int idOrdenCompra;
     private Proveedor proveedor;
     private LocalDate fechaOrden;
@@ -13,24 +15,22 @@ public class OrdenCompra {
     private double total;
     private String observaciones;
 
-    // Constructores
+    //Constructores
+
     public OrdenCompra() {
-        this.fechaOrden = LocalDate.now();
-        this.estado = EstadoOrdenCompra.PENDIENTE;
     }
 
-    public OrdenCompra(int idOrdenCompra, Proveedor proveedor,
-                       LocalDate fechaOrden, double total,
-                       String observaciones) {
+    public OrdenCompra(int idOrdenCompra, Proveedor proveedor, LocalDate fechaOrden, EstadoOrdenCompra estado, double total, String observaciones) {
         this.idOrdenCompra = idOrdenCompra;
         this.proveedor = proveedor;
         this.fechaOrden = fechaOrden;
+        this.estado = estado;
         this.total = total;
         this.observaciones = observaciones;
-        this.estado = EstadoOrdenCompra.PENDIENTE;
     }
 
-    // Getters y setters
+    //Getters and Setters
+
     public int getIdOrdenCompra() {
         return idOrdenCompra;
     }
@@ -78,4 +78,5 @@ public class OrdenCompra {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
 }

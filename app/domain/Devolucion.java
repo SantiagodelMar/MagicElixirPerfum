@@ -1,39 +1,43 @@
-package app.domain;
+package domain;
+
+import domain.enums.EstadoDevolucion;
+import domain.enums.MotivoDevolucion;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class Devolucion {
 
-    // Atributos de las clases
-
-    private static final int DIAS_MAXIMOS_PARA_DEVOLVER = 30;
-    private static final double PORCENTAJE_REEMBOLSO_PARCIAL = 0.80;
+    //Atributos
 
     private int idDevolucion;
-    private Pedido pedido;
+    private int idPedido;
+    private LocalDate fechaEntrega;
     private LocalDate fechaSolicitud;
     private MotivoDevolucion motivo;
     private String descripcion;
+    private double totalPagado;
     private EstadoDevolucion estado;
     private double montoReembolso;
 
+    //Constructores
+
     public Devolucion() {
-        this.estado = EstadoDevolucion.SOLICITADA;
     }
 
-    public Devolucion(int idDevolucion, Pedido pedido, LocalDate fechaSolicitud,
-                      MotivoDevolucion motivo, String descripcion) {
+    public Devolucion(int idDevolucion, int idPedido, LocalDate fechaEntrega, LocalDate fechaSolicitud,
+                      MotivoDevolucion motivo, String descripcion, double totalPagado) {
         this.idDevolucion = idDevolucion;
-        this.pedido = pedido;
+        this.idPedido = idPedido;
+        this.fechaEntrega = fechaEntrega;
         this.fechaSolicitud = fechaSolicitud;
         this.motivo = motivo;
         this.descripcion = descripcion;
+        this.totalPagado = totalPagado;
         this.estado = EstadoDevolucion.SOLICITADA;
         this.montoReembolso = 0;
     }
 
-    // Getters and setters del sistema MagicElicirPerfum
+    //Getters and Setters
 
     public int getIdDevolucion() {
         return idDevolucion;
@@ -43,12 +47,20 @@ public class Devolucion {
         this.idDevolucion = idDevolucion;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public int getIdPedido() {
+        return idPedido;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
+    }
+
+    public LocalDate getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(LocalDate fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
     }
 
     public LocalDate getFechaSolicitud() {
@@ -75,49 +87,28 @@ public class Devolucion {
         this.descripcion = descripcion;
     }
 
+    public double getTotalPagado() {
+        return totalPagado;
+    }
+
+    public void setTotalPagado(double totalPagado) {
+        this.totalPagado = totalPagado;
+    }
+
     public EstadoDevolucion getEstado() {
         return estado;
+    }
+
+    public void setEstado(EstadoDevolucion estado) {
+        this.estado = estado;
     }
 
     public double getMontoReembolso() {
         return montoReembolso;
     }
 
-    // Méodos del negocio
-
-    public boolean estaDentroDelPlazo(LocalDate fechaEntrega) {
-        if (fechaEntrega == null || fechaSolicitud == null) {
-            return false;
-        }
-        long dias = ChronoUnit.DAYS.between(fechaEntrega, fechaSolicitud);
-        return dias >= 0 && dias <= DIAS_MAXIMOS_PARA_DEVOLVER;
+    public void setMontoReembolso(double montoReembolso) {
+        this.montoReembolso = montoReembolso;
     }
 
-    public double calcularMontoReembolso(double totalPagado) {
-        if (motivo == MotivoDevolucion.ARREPENTIMIENTO_DE_COMPRA) {
-            return totalPagado * PORCENTAJE_REEMBOLSO_PARCIAL;
-        }
-        return totalPagado;
-    }
-
-    public void aprobar(double totalPagado) {
-        this.estado = EstadoDevolucion.APROBADA;
-        this.montoReembolso = calcularMontoReembolso(totalPagado);
-    }
-
-    public void rechazar() {
-        this.estado = EstadoDevolucion.RECHAZADA;
-        this.montoReembolso = 0;
-    }
-
-    public void registrarReembolso() {
-        this.estado = EstadoDevolucion.REEMBOLSADA;
-    }
-
-    public String mostrarDetalle() {
-        return "Devolucion #" + idDevolucion
-                + " | Motivo: " + motivo
-                + " | Estado: " + estado
-                + " | Reembolso: $" + montoReembolso;
-    }
 }

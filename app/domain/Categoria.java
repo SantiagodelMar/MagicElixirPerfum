@@ -2,20 +2,14 @@ package domain;
 
 public class Categoria {
 
-    // Atributos
+    //Atributos
+
     private int idCategoria;
     private String nombre;
     private String descripcion;
 
-    // Categorías válidas del catálogo de Instagram (HU-6)
-    public static final String[] CATEGORIAS_INSTAGRAM = {
-            "Perfumería Masculina",
-            "Perfumería Femenina",
-            "Árabe Masculina",
-            "Árabe Femenina"
-    };
+    //Constructores
 
-    // Constructores
     public Categoria() {
     }
 
@@ -25,7 +19,8 @@ public class Categoria {
         this.descripcion = descripcion;
     }
 
-    // Getters and Setters
+    //Getters and Setters
+
     public int getIdCategoria() {
         return idCategoria;
     }
@@ -50,17 +45,4 @@ public class Categoria {
         this.descripcion = descripcion;
     }
 
-    // Métodos (HU-6)
-    public String mostrarDetalles() {
-        return String.format("Categoría [%d]: %s - %s", idCategoria, nombre, descripcion);
-    }
-
-    public void create() {
-        System.out.println("Categoría " + nombre + " creada.");
-    }
-
-    public void update() {
-        System.out.println("Categoría " + nombre + " actualizada.");
-    }
-
-}// Fin public class
+}
