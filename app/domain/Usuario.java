@@ -1,5 +1,7 @@
 package domain;
 
+import domain.enums.TipoDocumento;
+
 public class Usuario {
 
     //Atributos
@@ -8,15 +10,17 @@ public class Usuario {
     private String nombre;
     private String apellido;
     private String correo;
-    private String tipoDoc;
+    private TipoDocumento tipoDoc;
     private String celular;
     private String direccion;
     private String fechaNacimiento;
 
+    //Constructores
+
     public Usuario() {
     }
 
-    public Usuario(int idUsuario, String nombre, String apellido, String correo, String tipoDoc, String celular, String direccion, String fechaNacimiento) {
+    public Usuario(int idUsuario, String nombre, String apellido, String correo, TipoDocumento tipoDoc, String celular, String direccion, String fechaNacimiento) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -26,6 +30,8 @@ public class Usuario {
         this.direccion = direccion;
         this.fechaNacimiento = fechaNacimiento;
     }
+
+    //Getters and Setters
 
     public int getIdUsuario() {
         return idUsuario;
@@ -59,11 +65,11 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getTipoDoc() {
+    public TipoDocumento getTipoDoc() {
         return tipoDoc;
     }
 
-    public void setTipoDoc(String tipoDoc) {
+    public void setTipoDoc(TipoDocumento tipoDoc) {
         this.tipoDoc = tipoDoc;
     }
 
@@ -91,24 +97,4 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public void create(){
-
-    }
-
-    public void selectAll(){
-
-    }
-
-    public void selectById(int idUsuario){
-
-    }
-
-    public void update(){
-
-    }
-
-    public void delete(){
-
-
-    }
 }

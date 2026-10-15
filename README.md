@@ -22,7 +22,29 @@ Sistema de gestión de ventas, inventario y logística para la perfumería Magic
 
 El proyecto se desarrolla utilizando Scrum.
 
+## Estructura del proyecto
 
-git add README.md
-git commit -m "docs: update README with Scrum structure"
-E0F
+```
+app/
+├── Application.java        -> clase con el main()
+├── domain/                 -> clases POJO
+│   └── enums/              -> enums del sistema
+├── repository/             -> implementacion de los repositorios (ArrayList en memoria)
+├── service/                -> implementacion de los servicios
+│   ├── inputport/          -> interfaces de los servicios
+│   ├── outputport/         -> interfaces de los repositorios
+│   ├── helpers/            -> metodos para setear los enums
+│   └── validations/        -> FormTypeValidator (unico Scanner)
+├── view/                   -> clases View de cada POJO
+└── ui/                     -> UserInterface con los menus
+```
+
+## Como ejecutar
+
+1. Abrir el proyecto en IntelliJ IDEA.
+2. Ejecutar `app/Application.java`.
+3. Iniciar sesion con el usuario de prueba:
+   - Correo: `admin@magicelixir.com`
+   - Contraseña: `1234`
+
+Al iniciar se cargan las 4 categorias, el catalogo de perfumes con 10 unidades de cada uno, un cliente y un proveedor de prueba.

@@ -1,7 +1,10 @@
 package domain;
 
+import domain.enums.EstadoPedido;
+import domain.enums.MetodoDePago;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Pedido {
@@ -9,38 +12,32 @@ public class Pedido {
     //Atributos
 
     private int idPedido;
-    private Date fechaPedido;
+    private LocalDate fechaPedido;
     private Cliente cliente;
     private double totalCostoPedido;
     private String observaciones;
-    private List <DetallePedido> detalles;
+    private List<DetallePedido> detalles;
     private EstadoPedido estadoPedido;
     private MetodoDePago metodoPago;
 
-
     //Constructores
-
-    //CONSTRUCTOR VACÍO
 
     public Pedido() {
         this.detalles = new ArrayList<>();
-        this.fechaPedido = new Date();
-        this.estadoPedido = EstadoPedido.PENDIENTE;
     }
 
-    // CONSTRUCTOR CON PARÁMETROS INICIALES
-
-    public Pedido(int idPedido, Cliente cliente, MetodoDePago metodoPago, String observaciones) {
-        this(); // Ejecuta el constructor vacío para inicializar la lista, la fecha y el estado
+    public Pedido(int idPedido, LocalDate fechaPedido, Cliente cliente, String observaciones, EstadoPedido estadoPedido, MetodoDePago metodoPago) {
         this.idPedido = idPedido;
+        this.fechaPedido = fechaPedido;
         this.cliente = cliente;
-        this.metodoPago = metodoPago;
         this.observaciones = observaciones;
+        this.estadoPedido = estadoPedido;
+        this.metodoPago = metodoPago;
+        this.totalCostoPedido = 0;
+        this.detalles = new ArrayList<>();
     }
-
 
     //Getters and Setters
-
 
     public int getIdPedido() {
         return idPedido;
@@ -50,11 +47,11 @@ public class Pedido {
         this.idPedido = idPedido;
     }
 
-    public Date getFechaPedido() {
+    public LocalDate getFechaPedido() {
         return fechaPedido;
     }
 
-    public void setFechaPedido(Date fechaPedido) {
+    public void setFechaPedido(LocalDate fechaPedido) {
         this.fechaPedido = fechaPedido;
     }
 
@@ -106,4 +103,4 @@ public class Pedido {
         this.metodoPago = metodoPago;
     }
 
-}//Fin public class
+}
