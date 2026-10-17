@@ -1,0 +1,584 @@
+/* Paleta y tipografias de la tienda (equivale a Estilo.java) */
+
+@font-face {
+    font-family: "Playfair Display";
+    src: url("../fuentes/PlayfairDisplay_400Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Playfair Display";
+    src: url("../fuentes/PlayfairDisplay_700Bold.ttf") format("truetype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../fuentes/Inter_400Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../fuentes/Inter_600SemiBold.ttf") format("truetype");
+    font-weight: 600;
+}
+
+:root {
+    --blanco: #FFFFFF;
+    --lienzo: #F4F2EE;
+    --tinta: #0C0C0D;
+    --tinta-encima: #2B2B2E;
+    --gris: #74726E;
+    --linea: #E3E0DA;
+    --crema: #F6F4F0;
+    --crema-tenue: #9A9792;
+    --error: #8C2F2F;
+    --serif: "Playfair Display", Georgia, serif;
+    --sans: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--tinta);
+    background: var(--blanco);
+    -webkit-font-smoothing: antialiased;
+}
+
+img {
+    display: block;
+}
+
+/* ---- textos ---- */
+
+.micro {
+    display: block;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gris);
+    white-space: pre-wrap;
+}
+
+.titulo {
+    font-family: var(--serif);
+    font-weight: 700;
+    color: var(--tinta);
+    line-height: 1.2;
+}
+
+.texto {
+    line-height: 1.45;
+}
+
+.gris {
+    color: var(--gris);
+}
+
+.tinta {
+    color: var(--tinta);
+}
+
+/* ---- layout (equivale a Caja.java) ---- */
+
+.columna {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.fila {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.fila .micro {
+    display: inline;
+}
+
+.aire {
+    flex-shrink: 0;
+}
+
+.renglon {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.renglon > :last-child {
+    text-align: right;
+}
+
+.renglon.con-aire {
+    padding: 5px 0;
+}
+
+/* ---- botones (equivale a Boton.java) ---- */
+
+.boton {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: pre;
+    padding: 13px 20px;
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    background: var(--blanco);
+    color: var(--tinta);
+    cursor: pointer;
+    transition: background-color 0.12s;
+}
+
+.boton:hover {
+    background: var(--lienzo);
+}
+
+.boton.solido {
+    background: var(--tinta);
+    border-color: var(--tinta);
+    color: var(--blanco);
+}
+
+.boton.solido:hover {
+    background: var(--tinta-encima);
+}
+
+.boton.compacto {
+    padding: 8px 14px;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+}
+
+.boton:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.boton:focus-visible,
+.enlace:focus-visible,
+.campo:focus-visible {
+    outline: 2px solid var(--tinta);
+    outline-offset: 2px;
+}
+
+.enlace {
+    background: none;
+    border: none;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--tinta);
+    padding: 6px 4px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.enlace:hover {
+    text-decoration: underline;
+}
+
+.enlace.gris {
+    font-size: 12.5px;
+    color: var(--gris);
+    padding: 4px 0;
+    align-self: flex-start;
+}
+
+/* ---- campos ---- */
+
+.campo {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--tinta);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--linea);
+    border-radius: 0;
+    padding: 8px 2px;
+    width: 100%;
+}
+
+.campo:focus {
+    outline: none;
+    border-bottom-color: var(--tinta);
+}
+
+.aviso {
+    font-size: 12px;
+    color: var(--error);
+    min-height: 17px;
+}
+
+.aviso-ok {
+    min-height: 17px;
+}
+
+/* ---- cabecera ---- */
+
+.cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    padding: 14px 34px;
+    background: var(--blanco);
+    border-bottom: 1px solid var(--linea);
+}
+
+.marca {
+    cursor: pointer;
+    flex-wrap: nowrap;
+}
+
+/* ---- acceso ---- */
+
+.acceso {
+    display: grid;
+    grid-template-columns: 505px 1fr;
+    min-height: 100vh;
+}
+
+.portada {
+    display: flex;
+    flex-direction: column;
+    background: var(--tinta);
+    padding: 66px 54px 46px;
+}
+
+.portada .lema {
+    font-family: var(--serif);
+    font-size: 44px;
+    line-height: 1.2;
+    color: var(--crema);
+}
+
+.portada .bajada {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--crema-tenue);
+}
+
+.portada .rotulos {
+    margin-top: auto;
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.portada .rotulos .micro {
+    color: var(--crema-tenue);
+}
+
+.acceso-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 24px;
+}
+
+.acceso-form .forma {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* ---- catalogo ---- */
+
+.catalogo-encabezado {
+    padding: 22px 34px 14px;
+}
+
+.buscador {
+    max-width: 430px;
+}
+
+.grilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+    gap: 24px 20px;
+    padding: 6px 34px 34px;
+}
+
+.tarjeta {
+    display: flex;
+    flex-direction: column;
+    min-height: 518px;
+    padding: 14px 16px 16px;
+    transition: border-color 0.15s;
+}
+
+.tarjeta:hover {
+    border-color: var(--tinta);
+}
+
+.tarjeta .foto {
+    height: 232px;
+    background: var(--lienzo);
+    overflow: hidden;
+}
+
+.tarjeta .foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tarjeta .datos {
+    padding-top: 14px;
+}
+
+.tarjeta .compra {
+    margin-top: auto;
+    padding-top: 12px;
+}
+
+/* ---- carrito ---- */
+
+.carrito {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    align-items: start;
+    column-gap: 28px;
+    padding: 28px 34px;
+}
+
+.carrito-titulo {
+    grid-column: 1 / -1;
+}
+
+.fila-carrito {
+    display: flex;
+    gap: 18px;
+    padding: 16px 14px 16px 0;
+    border-bottom: 1px solid var(--linea);
+}
+
+.fila-carrito .miniatura {
+    flex-shrink: 0;
+    width: 74px;
+    height: 92px;
+    background: var(--lienzo);
+    overflow: hidden;
+}
+
+.fila-carrito .miniatura img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fila-carrito .detalle {
+    flex: 1;
+    min-width: 0;
+}
+
+.fila-carrito .controles {
+    align-items: flex-end;
+}
+
+.boton.cuadro {
+    width: 32px;
+    height: 30px;
+    padding: 0;
+    font-size: 15px;
+    letter-spacing: 0;
+}
+
+.cantidad {
+    width: 30px;
+    text-align: center;
+}
+
+.resumen {
+    position: sticky;
+    top: 90px;
+    padding: 26px;
+    background: var(--lienzo);
+    border: none;
+}
+
+/* ---- orden y perfil ---- */
+
+.centrado {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 24px;
+}
+
+.panel-redondo {
+    background: var(--blanco);
+    border: 1px solid var(--linea);
+    border-radius: 9px;
+}
+
+.orden-caja {
+    width: 100%;
+    max-width: 660px;
+    padding: 38px 40px 34px;
+}
+
+.perfil-caja {
+    width: 100%;
+    max-width: 520px;
+    padding: 36px 38px 30px;
+}
+
+/* ---- pantallas pequenas ---- */
+
+@media (max-width: 900px) {
+    .acceso {
+        grid-template-columns: 1fr;
+    }
+
+    .portada {
+        padding: 40px 24px;
+    }
+
+    .portada .lema {
+        font-size: 34px;
+    }
+
+    .cabecera,
+    .catalogo-encabezado {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .grilla {
+        padding: 6px 16px 24px;
+    }
+
+    .carrito {
+        grid-template-columns: 1fr;
+        padding: 24px 16px;
+        row-gap: 24px;
+    }
+
+    .resumen {
+        position: static;
+    }
+
+    .fila-carrito {
+        flex-wrap: wrap;
+    }
+
+    .fila-carrito .controles {
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    .orden-caja,
+    .perfil-caja {
+        padding: 28px 20px;
+    }
+}
+
+/* ---- conexion con el backend Java ---- */
+
+.aviso-conexion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 12px 34px;
+    background: #FBEDEA;
+    border-bottom: 1px solid #EBC9C2;
+}
+
+/* ---- monograma: los perfumes de Java no traen foto ---- */
+
+.monograma {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--tinta);
+}
+
+.monograma span:first-child {
+    font-family: var(--serif);
+    font-size: 64px;
+    line-height: 1;
+}
+
+.tarjeta .foto.monograma {
+    background: linear-gradient(160deg, var(--lienzo), #E9E5DE);
+}
+
+.fila-carrito .miniatura.monograma span {
+    font-size: 26px;
+}
+
+select.campo {
+    appearance: none;
+    cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--gris) 50%),
+        linear-gradient(135deg, var(--gris) 50%, transparent 50%);
+    background-position: calc(100% - 12px) 55%, calc(100% - 7px) 55%;
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+}
+
+.dos-columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+}
+
+/* ---- perfil: datos y pedidos ---- */
+
+.perfil {
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.fila-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--linea);
+}
+
+.fila-pedido .estado {
+    padding: 6px 10px;
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    color: var(--tinta);
+    white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+    .aviso-conexion {
+        padding: 12px 16px;
+    }
+
+    .dos-columnas {
+        grid-template-columns: 1fr;
+    }
+}

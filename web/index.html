@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Magic Elixir Perfum | Tienda en línea</title>
+    <link rel="icon" href="img/logo.png">
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- api: conexion con el backend Java -->
+    <script src="js/api/Api.js"></script>
+
+    <!-- domain: logica del negocio (el orden importa: primero las clases padre) -->
+    <script src="js/domain/Dinero.js"></script>
+    <script src="js/domain/Producto.js"></script>
+    <script src="js/domain/Perfume.js"></script>
+    <script src="js/domain/ItemCarrito.js"></script>
+    <script src="js/domain/CarritoCompra.js"></script>
+    <script src="js/domain/Cliente.js"></script>
+    <script src="js/domain/Pedido.js"></script>
+    <script src="js/domain/Catalogo.js"></script>
+    <script src="js/domain/Tienda.js"></script>
+
+    <!-- ui: pantallas -->
+    <script src="js/ui/Estilo.js"></script>
+    <script src="js/ui/Caja.js"></script>
+    <script src="js/ui/Boton.js"></script>
+    <script src="js/ui/Recursos.js"></script>
+    <script src="js/ui/PanelRedondo.js"></script>
+    <script src="js/ui/Cabecera.js"></script>
+    <script src="js/ui/FormRegistro.js"></script>
+    <script src="js/ui/FormAcceso.js"></script>
+    <script src="js/ui/PanelAcceso.js"></script>
+    <script src="js/ui/TarjetaProducto.js"></script>
+    <script src="js/ui/PanelCatalogo.js"></script>
+    <script src="js/ui/FilaCarrito.js"></script>
+    <script src="js/ui/ResumenPedido.js"></script>
+    <script src="js/ui/PanelCarrito.js"></script>
+    <script src="js/ui/PanelOrden.js"></script>
+    <script src="js/ui/PanelPerfil.js"></script>
+    <script src="js/ui/VentanaPrincipal.js"></script>
+
+    <!-- main: punto de entrada -->
+    <script src="js/main/Main.js"></script>
+</body>
+</html>
