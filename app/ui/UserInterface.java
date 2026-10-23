@@ -1,53 +1,6 @@
 package ui;
 
-import domain.Categoria;
-import domain.Perfume;
-import domain.enums.TipoDocumento;
-import repository.AdministradorRepositoryImp;
-import repository.CargadorDatos;
-import repository.CategoriaRepositoryImp;
-import repository.ClienteRepositoryImp;
-import repository.DevolucionRepositoryImp;
-import repository.EmpleadoRepositoryImp;
-import repository.EnvioRepositoryImp;
-import repository.InventarioRepositoryImp;
-import repository.OrdenCompraRepositoryImp;
-import repository.PedidoRepositoryImp;
-import repository.PerfumeRepositoryImp;
-import repository.ProveedorRepositoryImp;
-import service.AdministradorServiceImp;
-import service.CategoriaServiceImp;
-import service.ClienteServiceImp;
-import service.DevolucionServiceImp;
-import service.EmpleadoServiceImp;
-import service.EnvioServiceImp;
-import service.InventarioServiceImp;
-import service.OrdenCompraServiceImp;
-import service.PedidoServiceImp;
-import service.PerfumeServiceImp;
-import service.ProveedorServiceImp;
-import service.inputport.AdministradorServiceInterface;
-import service.inputport.CategoriaServiceInterface;
-import service.inputport.ClienteServiceInterface;
-import service.inputport.DevolucionServiceInterface;
-import service.inputport.EmpleadoServiceInterface;
-import service.inputport.EnvioServiceInterface;
-import service.inputport.InventarioServiceInterface;
-import service.inputport.OrdenCompraServiceInterface;
-import service.inputport.PedidoServiceInterface;
-import service.inputport.PerfumeServiceInterface;
-import service.inputport.ProveedorServiceInterface;
-import service.outputport.AdministradorRepositoryPort;
-import service.outputport.CategoriaRepositoryPort;
-import service.outputport.ClienteRepositoryPort;
-import service.outputport.DevolucionRepositoryPort;
-import service.outputport.EmpleadoRepositoryPort;
-import service.outputport.EnvioRepositoryPort;
-import service.outputport.InventarioRepositoryPort;
-import service.outputport.OrdenCompraRepositoryPort;
-import service.outputport.PedidoRepositoryPort;
-import service.outputport.PerfumeRepositoryPort;
-import service.outputport.ProveedorRepositoryPort;
+import config.Contexto;
 import service.validations.FormTypeValidator;
 import view.AdministradorView;
 import view.CategoriaView;
@@ -60,8 +13,6 @@ import view.OrdenCompraView;
 import view.PedidoView;
 import view.PerfumeView;
 import view.ProveedorView;
-
-import java.util.List;
 
 public class UserInterface {
 
@@ -78,82 +29,24 @@ public class UserInterface {
     private final DevolucionView devolucionView;
 
     public UserInterface() {
-        // 1. Repositories (las listas en memoria)
-        ClienteRepositoryPort clienteRepository = new ClienteRepositoryImp();
-        EmpleadoRepositoryPort empleadoRepository = new EmpleadoRepositoryImp();
-        AdministradorRepositoryPort administradorRepository = new AdministradorRepositoryImp();
-        CategoriaRepositoryPort categoriaRepository = new CategoriaRepositoryImp();
-        PerfumeRepositoryPort perfumeRepository = new PerfumeRepositoryImp();
-        InventarioRepositoryPort inventarioRepository = new InventarioRepositoryImp();
-        PedidoRepositoryPort pedidoRepository = new PedidoRepositoryImp();
-        EnvioRepositoryPort envioRepository = new EnvioRepositoryImp();
-        ProveedorRepositoryPort proveedorRepository = new ProveedorRepositoryImp();
-        OrdenCompraRepositoryPort ordenCompraRepository = new OrdenCompraRepositoryImp();
-        DevolucionRepositoryPort devolucionRepository = new DevolucionRepositoryImp();
-
-        // 2. Services: se les inyecta el repository por el constructor
-        ClienteServiceInterface clienteService = new ClienteServiceImp(clienteRepository);
-        EmpleadoServiceInterface empleadoService = new EmpleadoServiceImp(empleadoRepository);
-        AdministradorServiceInterface administradorService = new AdministradorServiceImp(administradorRepository);
-        CategoriaServiceInterface categoriaService = new CategoriaServiceImp(categoriaRepository);
-        PerfumeServiceInterface perfumeService = new PerfumeServiceImp(perfumeRepository, categoriaRepository);
-        InventarioServiceInterface inventarioService = new InventarioServiceImp(inventarioRepository, perfumeRepository);
-        PedidoServiceInterface pedidoService = new PedidoServiceImp(pedidoRepository, clienteRepository, perfumeRepository, inventarioRepository);
-        EnvioServiceInterface envioService = new EnvioServiceImp(envioRepository, pedidoRepository);
-        ProveedorServiceInterface proveedorService = new ProveedorServiceImp(proveedorRepository);
-        OrdenCompraServiceInterface ordenCompraService = new OrdenCompraServiceImp(ordenCompraRepository, proveedorRepository);
-        DevolucionServiceInterface devolucionService = new DevolucionServiceImp(devolucionRepository);
-
-        // 3. Views: se les inyecta el service por el constructor
-        this.clienteView = new ClienteView(clienteService);
-        this.empleadoView = new EmpleadoView(empleadoService);
-        this.administradorView = new AdministradorView(administradorService);
-        this.categoriaView = new CategoriaView(categoriaService);
-        this.perfumeView = new PerfumeView(perfumeService);
-        this.inventarioView = new InventarioView(inventarioService);
-        this.pedidoView = new PedidoView(pedidoService);
-        this.envioView = new EnvioView(envioService);
-        this.proveedorView = new ProveedorView(proveedorService);
-        this.ordenCompraView = new OrdenCompraView(ordenCompraService);
-        this.devolucionView = new DevolucionView(devolucionService);
-
-        cargarDatosIniciales(empleadoService, administradorService, clienteService, categoriaService,
-                perfumeService, inventarioService, proveedorService);
+        this(new Contexto());
     }
 
-    // Datos de prueba para no empezar con todo vacio
-    private void cargarDatosIniciales(EmpleadoServiceInterface empleadoService, AdministradorServiceInterface administradorService,
-                                      ClienteServiceInterface clienteService, CategoriaServiceInterface categoriaService,
-                                      PerfumeServiceInterface perfumeService, InventarioServiceInterface inventarioService,
-                                      ProveedorServiceInterface proveedorService) {
-
-        empleadoService.createEmpleado(1, "Admin", "Magic Elixir", "admin@magicelixir.com", TipoDocumento.CC,
-                "3000000000", "Medellin", "2000-01-01", "Vendedor", "1234");
-
-        administradorService.createAdministrador(1, "Aaron Mateo", "Ruiz", "aaron@magicelixir.com", TipoDocumento.CC,
-                "3001112233", "Medellin", "2000-05-10", "Total", "1");
-
-        clienteService.createCliente(1, "Anyi", "Cañas", "anyi@gmail.com", TipoDocumento.CC, "3001234567",
-                "Calle 10 #20-30", "2001-03-15", "Frecuente", "Calle 10 #20-30");
-
-        proveedorService.createProveedor(1, "Distribuidora Arabe SAS", "900123456", "6044445566",
-                "ventas@distriarabe.com", "Bogota");
-
-        // HU-06: las 4 categorias de Instagram (en el orden que usa CargadorDatos)
-        categoriaService.createCategoria(1, "Árabe Masculina", "Fragancias arabes para hombre");
-        categoriaService.createCategoria(2, "Perfumería Masculina", "Fragancias de diseñador para hombre");
-        categoriaService.createCategoria(3, "Árabe Femenina", "Fragancias arabes para mujer");
-        categoriaService.createCategoria(4, "Perfumería Femenina", "Fragancias de diseñador para mujer");
-
-        // Catalogo completo de perfumes y 10 unidades de cada uno
-        List<Categoria> categorias = categoriaService.selectAllCategorias();
-        List<Perfume> catalogo = CargadorDatos.cargarPerfumes(categorias);
-
-        for (Perfume p : catalogo) {
-            perfumeService.createPerfume(p.getIdPerfume(), p.getNombre(), p.getMarca(), p.getPrecio(),
-                    p.getMililitros(), p.getNotasOlfativas(), p.getCategoria().getIdCategoria());
-            inventarioService.createInventario(p.getIdPerfume(), p.getIdPerfume(), 10);
-        }
+    // Los repositories, services y datos de prueba vienen del Contexto (config/Contexto.java).
+    // Es el mismo Contexto que usa la interfaz grafica, por eso los dos ven los mismos datos.
+    public UserInterface(Contexto contexto) {
+        // Views: se les inyecta el service por el constructor
+        this.clienteView = new ClienteView(contexto.getClienteService());
+        this.empleadoView = new EmpleadoView(contexto.getEmpleadoService());
+        this.administradorView = new AdministradorView(contexto.getAdministradorService());
+        this.categoriaView = new CategoriaView(contexto.getCategoriaService());
+        this.perfumeView = new PerfumeView(contexto.getPerfumeService());
+        this.inventarioView = new InventarioView(contexto.getInventarioService());
+        this.pedidoView = new PedidoView(contexto.getPedidoService());
+        this.envioView = new EnvioView(contexto.getEnvioService());
+        this.proveedorView = new ProveedorView(contexto.getProveedorService());
+        this.ordenCompraView = new OrdenCompraView(contexto.getOrdenCompraService());
+        this.devolucionView = new DevolucionView(contexto.getDevolucionService());
     }
 
     public void menuApp() {

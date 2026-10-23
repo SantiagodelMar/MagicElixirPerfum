@@ -1,0 +1,3 @@
+# Carpeta donde IntelliJ deja las clases compiladas
+out/
+*.class
