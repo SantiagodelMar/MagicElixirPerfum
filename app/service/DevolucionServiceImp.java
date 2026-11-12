@@ -5,6 +5,7 @@ import domain.enums.EstadoDevolucion;
 import domain.enums.MotivoDevolucion;
 import service.inputport.DevolucionServiceInterface;
 import service.outputport.DevolucionRepositoryPort;
+import service.outputport.PedidoRepositoryPort;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -17,29 +18,35 @@ public class DevolucionServiceImp implements DevolucionServiceInterface {
     private static final double PORCENTAJE_ARREPENTIMIENTO = 0.80;
 
     private final DevolucionRepositoryPort devolucionRepository;
+    private final PedidoRepositoryPort pedidoRepository;
 
-    public DevolucionServiceImp(DevolucionRepositoryPort devolucionRepository) {
+    public DevolucionServiceImp(DevolucionRepositoryPort devolucionRepository, PedidoRepositoryPort pedidoRepository) {
         this.devolucionRepository = devolucionRepository;
+        this.pedidoRepository = pedidoRepository;
     }
 
     @Override
     public Devolucion createDevolucion(int idDevolucion, int idPedido, LocalDate fechaEntrega,
                                        MotivoDevolucion motivo, String descripcion, double totalPagado) {
+        // La devolucion tiene que ser de un pedido que exista
+        if (pedidoRepository.selectPedidoById(idPedido) == null) {
+            return null;
+        }
 
         Devolucion devolucion = new Devolucion(idDevolucion, idPedido, fechaEntrega, LocalDate.now(),
                 motivo, descripcion, totalPagado);
 
-        // Si esta dentro del plazo se aprueba, si no se rechaza
+        // HU-17: si esta dentro del plazo queda SOLICITADA (el administrador decide, HU-18);
+        // si se paso de los 30 dias el sistema la rechaza solo
         long dias = ChronoUnit.DAYS.between(fechaEntrega, devolucion.getFechaSolicitud());
-
         if (dias >= 0 && dias <= DIAS_MAXIMOS) {
-            devolucion.setEstado(EstadoDevolucion.APROBADA);
+            devolucion.setEstado(EstadoDevolucion.SOLICITADA);
+            // HU-19: el reembolso se calcula segun el motivo
             devolucion.setMontoReembolso(calcularReembolso(motivo, totalPagado));
         } else {
             devolucion.setEstado(EstadoDevolucion.RECHAZADA);
             devolucion.setMontoReembolso(0);
         }
-
         return devolucionRepository.createDevolucion(devolucion);
     }
 
@@ -64,7 +71,7 @@ public class DevolucionServiceImp implements DevolucionServiceInterface {
         devolucion.setDescripcion(descripcion);
 
         // Si cambia el motivo hay que recalcular lo que se devuelve
-        if (devolucion.getEstado() == EstadoDevolucion.APROBADA) {
+        if (devolucion.getEstado() == EstadoDevolucion.SOLICITADA || devolucion.getEstado() == EstadoDevolucion.APROBADA) {
             devolucion.setMontoReembolso(calcularReembolso(motivo, devolucion.getTotalPagado()));
         }
 
@@ -74,6 +81,29 @@ public class DevolucionServiceImp implements DevolucionServiceInterface {
     @Override
     public void deleteDevolucionById(int id) {
         devolucionRepository.deleteDevolucionById(id);
+    }
+
+    // HU-18: el administrador aprueba una solicitud que esta dentro del plazo
+    @Override
+    public Devolucion aprobarDevolucion(int id) {
+        Devolucion devolucion = devolucionRepository.selectDevolucionById(id);
+        if (devolucion == null || devolucion.getEstado() != EstadoDevolucion.SOLICITADA) {
+            return null;
+        }
+        devolucion.setEstado(EstadoDevolucion.APROBADA);
+        return devolucionRepository.updateDevolucion(devolucion);
+    }
+
+    // HU-18: el administrador rechaza la solicitud (no se reembolsa nada)
+    @Override
+    public Devolucion rechazarDevolucion(int id) {
+        Devolucion devolucion = devolucionRepository.selectDevolucionById(id);
+        if (devolucion == null || devolucion.getEstado() != EstadoDevolucion.SOLICITADA) {
+            return null;
+        }
+        devolucion.setEstado(EstadoDevolucion.RECHAZADA);
+        devolucion.setMontoReembolso(0);
+        return devolucionRepository.updateDevolucion(devolucion);
     }
 
     @Override

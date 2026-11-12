@@ -1,6 +1,7 @@
 package service.inputport;
 
 import domain.Pedido;
+import domain.enums.CanalVenta;
 import domain.enums.EstadoPedido;
 import domain.enums.MetodoDePago;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface PedidoServiceInterface {
 
-    public Pedido createPedido(int idPedido, int idCliente, MetodoDePago metodoPago, String observaciones);
+    public Pedido createPedido(int idPedido, int idCliente, MetodoDePago metodoPago, CanalVenta canalVenta, String observaciones);
     public String agregarPerfume(int idPedido, int idPerfume, int cantidad);
     public Pedido selectPedidoById(int id);
     public List<Pedido> selectAllPedidos();

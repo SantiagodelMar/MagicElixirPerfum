@@ -26,8 +26,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 // Modulo de Post-Venta y Garantias (Santiago)
-// HU-17: el cliente puede devolver hasta 30 dias despues de la entrega.
-// Si es por arrepentimiento se le devuelve el 80%, en los demas casos el 100%.
+// HU-17: el cliente puede devolver hasta 30 dias despues de la entrega (si se pasa, se rechaza sola).
+// HU-18: el administrador aprueba o rechaza las solicitudes que estan dentro del plazo.
+// HU-19: si es por arrepentimiento se devuelve el 80%, en los demas casos el 100%.
 // Las reglas estan en DevolucionServiceImp, aqui solo se piden los datos y se muestran.
 public class PanelDevoluciones extends PanelModulo {
 
@@ -44,6 +45,8 @@ public class PanelDevoluciones extends PanelModulo {
 
     private final Boton btnGuardar = new Boton("Registrar devolución", Boton.PRINCIPAL);
     private final Boton btnActualizar = new Boton("Actualizar", Boton.SECUNDARIO);
+    private final Boton btnAprobar = new Boton("Aprobar", Boton.PRINCIPAL);
+    private final Boton btnRechazar = new Boton("Rechazar", Boton.PELIGRO);
     private final Boton btnReembolso = new Boton("Registrar reembolso", Boton.SECUNDARIO);
     private final Boton btnEliminar = new Boton("Eliminar", Boton.PELIGRO);
     private final Boton btnLimpiar = new Boton("Limpiar", Boton.SECUNDARIO);
@@ -56,8 +59,8 @@ public class PanelDevoluciones extends PanelModulo {
 
     public PanelDevoluciones(VentanaPrincipal ventana, DevolucionServiceInterface devolucionService,
                              PedidoServiceInterface pedidoService, EnvioServiceInterface envioService) {
-        super(ventana, "Post-venta y garantías  ·  HU-17 y HU-19", "Devoluciones",
-                "Hasta 30 días después de la entrega. Por arrepentimiento se reembolsa el 80%, por daño o error el 100%.");
+        super(ventana, "Post-venta y garantías  ·  HU-17, HU-18 y HU-19", "Devoluciones",
+                "Hasta 30 días después de la entrega. El administrador aprueba o rechaza. Arrepentimiento: 80%, daño o error: 100%.");
         this.devolucionService = devolucionService;
         this.pedidoService = pedidoService;
         this.envioService = envioService;
@@ -73,12 +76,16 @@ public class PanelDevoluciones extends PanelModulo {
 
         formulario.agregarBoton(btnLimpiar);
         formulario.agregarBoton(btnEliminar);
+        formulario.agregarBoton(btnRechazar);
+        formulario.agregarBoton(btnAprobar);
         formulario.agregarBoton(btnReembolso);
         formulario.agregarBoton(btnActualizar);
         formulario.agregarBoton(btnGuardar);
 
         btnGuardar.addActionListener(e -> guardar());
         btnActualizar.addActionListener(e -> actualizar());
+        btnAprobar.addActionListener(e -> aprobar());
+        btnRechazar.addActionListener(e -> rechazar());
         btnReembolso.addActionListener(e -> registrarReembolso());
         btnEliminar.addActionListener(e -> eliminar());
         btnLimpiar.addActionListener(e -> limpiarFormulario());
@@ -174,11 +181,18 @@ public class PanelDevoluciones extends PanelModulo {
             Devolucion devolucion = devolucionService.createDevolucion(id, idPedido, fechaEntrega, motivo,
                     descripcion, totalPagado);
 
-            // El service decide si se aprueba o se rechaza segun los dias
-            if (devolucion.getEstado() == EstadoDevolucion.APROBADA) {
-                mostrarExito("Devolución aprobada: se reembolsan " + Formato.dinero(devolucion.getMontoReembolso()));
-            } else {
+            if (devolucion == null) {
+                txtIdPedido.marcarError();
+                mostrarError("No existe el pedido #" + idPedido);
+                return;
+            }
+
+            // El service revisa los 30 dias: dentro del plazo queda SOLICITADA, si no, RECHAZADA
+            if (devolucion.getEstado() == EstadoDevolucion.RECHAZADA) {
                 mostrarError("Devolución rechazada: pasaron más de 30 días desde la entrega");
+            } else {
+                mostrarExito("Solicitud registrada. Reembolso calculado: " + Formato.dinero(devolucion.getMontoReembolso())
+                        + ". Falta que el administrador la apruebe");
             }
             cargarTabla();
             limpiarFormulario();
@@ -202,6 +216,37 @@ public class PanelDevoluciones extends PanelModulo {
         } catch (DatoInvalidoException e) {
             mostrarError(e.getMessage());
         }
+    }
+
+    // HU-18
+    private void aprobar() {
+        Devolucion devolucion = devolucionService.aprobarDevolucion(idSeleccionado);
+        if (devolucion == null) {
+            mostrarError("Solo se pueden aprobar solicitudes en estado Solicitada");
+            return;
+        }
+        mostrarExito("Devolución aprobada. Se reembolsan " + Formato.dinero(devolucion.getMontoReembolso()));
+        int id = idSeleccionado;
+        cargarTabla();
+        listado.getTabla().seleccionarId(id);
+    }
+
+    // HU-18
+    private void rechazar() {
+        boolean confirmado = confirmar("¿Rechazar devolución?",
+                "La devolución #" + idSeleccionado + " quedará rechazada y no se reembolsará nada.", "Rechazar");
+        if (!confirmado) {
+            return;
+        }
+        Devolucion devolucion = devolucionService.rechazarDevolucion(idSeleccionado);
+        if (devolucion == null) {
+            mostrarError("Solo se pueden rechazar solicitudes en estado Solicitada");
+            return;
+        }
+        mostrarExito("Devolución rechazada");
+        int id = idSeleccionado;
+        cargarTabla();
+        listado.getTabla().seleccionarId(id);
     }
 
     private void registrarReembolso() {
@@ -244,7 +289,9 @@ public class PanelDevoluciones extends PanelModulo {
         quitarErrores(txtId, txtIdPedido, txtFechaEntrega, txtDescripcion, txtTotalPagado);
         modoEdicion(true);
 
-        // El reembolso solo se puede registrar si esta aprobada
+        // Aprobar y rechazar solo con solicitudes pendientes; el reembolso solo si esta aprobada
+        btnAprobar.setEnabled(devolucion.getEstado() == EstadoDevolucion.SOLICITADA);
+        btnRechazar.setEnabled(devolucion.getEstado() == EstadoDevolucion.SOLICITADA);
         btnReembolso.setEnabled(devolucion.getEstado() == EstadoDevolucion.APROBADA);
         formulario.setNota("Estado: " + devolucion.getEstado().getDescripcion()
                 + "  ·  Reembolso: " + Formato.dinero(devolucion.getMontoReembolso()));
@@ -272,6 +319,8 @@ public class PanelDevoluciones extends PanelModulo {
 
         btnGuardar.setEnabled(!editando);
         btnActualizar.setEnabled(editando);
+        btnAprobar.setEnabled(editando);
+        btnRechazar.setEnabled(editando);
         btnReembolso.setEnabled(editando);
         btnEliminar.setEnabled(editando);
 

@@ -8,11 +8,13 @@ import view.ClienteView;
 import view.DevolucionView;
 import view.EmpleadoView;
 import view.EnvioView;
+import view.GarantiaView;
 import view.InventarioView;
 import view.OrdenCompraView;
 import view.PedidoView;
 import view.PerfumeView;
 import view.ProveedorView;
+import view.ReporteView;
 
 public class UserInterface {
 
@@ -27,6 +29,8 @@ public class UserInterface {
     private final ProveedorView proveedorView;
     private final OrdenCompraView ordenCompraView;
     private final DevolucionView devolucionView;
+    private final GarantiaView garantiaView;
+    private final ReporteView reporteView;
 
     public UserInterface() {
         this(new Contexto());
@@ -47,6 +51,8 @@ public class UserInterface {
         this.proveedorView = new ProveedorView(contexto.getProveedorService());
         this.ordenCompraView = new OrdenCompraView(contexto.getOrdenCompraService());
         this.devolucionView = new DevolucionView(contexto.getDevolucionService());
+        this.garantiaView = new GarantiaView(contexto.getGarantiaService());
+        this.reporteView = new ReporteView(contexto.getReporteService());
     }
 
     public void menuApp() {
@@ -95,6 +101,8 @@ public class UserInterface {
             System.out.println("9. Proveedores");
             System.out.println("10. Ordenes de compra");
             System.out.println("11. Devoluciones");
+            System.out.println("12. Garantias");
+            System.out.println("13. Reportes");
             System.out.println("0. Cerrar sesion");
             opcion = FormTypeValidator.intValidator("Seleccione una opcion:");
 
@@ -131,6 +139,12 @@ public class UserInterface {
                     break;
                 case 11:
                     menuDevoluciones();
+                    break;
+                case 12:
+                    menuGarantias();
+                    break;
+                case 13:
+                    menuReportes();
                     break;
                 case 0:
                     System.out.println("Sesion cerrada");
@@ -551,6 +565,8 @@ public class UserInterface {
             System.out.println("4. Actualizar devolucion");
             System.out.println("5. Eliminar devolucion");
             System.out.println("6. Registrar reembolso");
+            System.out.println("7. Aprobar devolucion");
+            System.out.println("8. Rechazar devolucion");
             System.out.println("0. Volver");
             opcion = FormTypeValidator.intValidator("Seleccione una opcion:");
 
@@ -572,6 +588,82 @@ public class UserInterface {
                     break;
                 case 6:
                     devolucionView.registrarReembolso();
+                    break;
+                case 7:
+                    devolucionView.aprobarDevolucion();
+                    break;
+                case 8:
+                    devolucionView.rechazarDevolucion();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opcion no valida");
+            }
+        } while (opcion != 0);
+    }
+
+    // HU-20 y HU-21
+    public void menuGarantias() {
+        int opcion;
+        do {
+            System.out.println("\n--- MENU GARANTIAS ---");
+            System.out.println("1. Registrar garantia");
+            System.out.println("2. Buscar garantia por id");
+            System.out.println("3. Ver todas las garantias");
+            System.out.println("4. Actualizar garantia");
+            System.out.println("5. Eliminar garantia");
+            System.out.println("6. Consultar si sigue vigente");
+            System.out.println("0. Volver");
+            opcion = FormTypeValidator.intValidator("Seleccione una opcion:");
+
+            switch (opcion) {
+                case 1:
+                    garantiaView.createGarantia();
+                    break;
+                case 2:
+                    garantiaView.selectGarantiaById();
+                    break;
+                case 3:
+                    garantiaView.selectAllGarantias();
+                    break;
+                case 4:
+                    garantiaView.updateGarantia();
+                    break;
+                case 5:
+                    garantiaView.deleteGarantia();
+                    break;
+                case 6:
+                    garantiaView.consultarVigencia();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opcion no valida");
+            }
+        } while (opcion != 0);
+    }
+
+    // HU-22, HU-23 y HU-24
+    public void menuReportes() {
+        int opcion;
+        do {
+            System.out.println("\n--- MENU REPORTES ---");
+            System.out.println("1. Total vendido en un rango de fechas");
+            System.out.println("2. Perfumes mas vendidos");
+            System.out.println("3. Ventas por canal");
+            System.out.println("0. Volver");
+            opcion = FormTypeValidator.intValidator("Seleccione una opcion:");
+
+            switch (opcion) {
+                case 1:
+                    reporteView.totalVendido();
+                    break;
+                case 2:
+                    reporteView.perfumesMasVendidos();
+                    break;
+                case 3:
+                    reporteView.ventasPorCanal();
                     break;
                 case 0:
                     break;

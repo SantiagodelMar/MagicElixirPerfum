@@ -20,4 +20,4 @@ public enum EstadoOrdenCompra {
     public String getDescripcion() {
         return descripcion;
     }
-}
+}

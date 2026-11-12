@@ -1,6 +1,7 @@
 package view;
 
 import domain.Devolucion;
+import domain.enums.EstadoDevolucion;
 import domain.enums.MotivoDevolucion;
 import service.helpers.SetDevolucionHelper;
 import service.inputport.DevolucionServiceInterface;
@@ -34,11 +35,17 @@ public class DevolucionView {
         Devolucion devolucion = devolucionService.createDevolucion(idDevolucion, idPedido, fechaEntrega,
                 motivo, descripcion, totalPagado);
 
+        if (devolucion == null) {
+            System.out.println("No existe el pedido, revise el id");
+            return;
+        }
+
         System.out.println("Devolucion registrada con estado: " + devolucion.getEstado().getDescripcion());
-        if (devolucion.getMontoReembolso() == 0) {
+        if (devolucion.getEstado() == EstadoDevolucion.RECHAZADA) {
             System.out.println("La devolucion fue rechazada porque ya pasaron mas de 30 dias desde la entrega");
         } else {
-            System.out.println("Monto a reembolsar: $" + devolucion.getMontoReembolso());
+            System.out.println("Reembolso calculado: $" + devolucion.getMontoReembolso()
+                    + " (falta que el administrador la apruebe)");
         }
     }
 
@@ -91,6 +98,30 @@ public class DevolucionView {
 
         devolucionService.deleteDevolucionById(id);
         System.out.println("Devolucion eliminada");
+    }
+
+    // HU-18
+    public void aprobarDevolucion() {
+        int id = FormTypeValidator.intValidator("Ingrese el id de la devolucion a aprobar");
+        Devolucion devolucion = devolucionService.aprobarDevolucion(id);
+
+        if (devolucion == null) {
+            System.out.println("Solo se pueden aprobar devoluciones en estado Solicitada");
+        } else {
+            System.out.println("Devolucion aprobada. Reembolso: $" + devolucion.getMontoReembolso());
+        }
+    }
+
+    // HU-18
+    public void rechazarDevolucion() {
+        int id = FormTypeValidator.intValidator("Ingrese el id de la devolucion a rechazar");
+        Devolucion devolucion = devolucionService.rechazarDevolucion(id);
+
+        if (devolucion == null) {
+            System.out.println("Solo se pueden rechazar devoluciones en estado Solicitada");
+        } else {
+            System.out.println("Devolucion rechazada");
+        }
     }
 
     public void registrarReembolso() {

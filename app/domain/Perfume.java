@@ -85,4 +85,22 @@ public class Perfume {
         this.categoria = categoria;
     }
 
+    // Dos objetos son "el mismo" si tienen el mismo id (asi un objeto leido otra vez de la base de datos
+    // se reconoce como igual al que ya estaba, por ejemplo en las listas desplegables)
+    @Override
+    public boolean equals(Object otro) {
+        if (this == otro) {
+            return true;
+        }
+        if (otro == null || getClass() != otro.getClass()) {
+            return false;
+        }
+        return idPerfume == ((Perfume) otro).idPerfume;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(idPerfume);
+    }
+
 }

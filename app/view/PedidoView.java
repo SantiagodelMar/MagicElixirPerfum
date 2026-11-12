@@ -3,6 +3,7 @@ package view;
 import domain.DetallePedido;
 import domain.Pedido;
 import domain.enums.EstadoPedido;
+import domain.enums.CanalVenta;
 import domain.enums.MetodoDePago;
 import service.helpers.SetPedidoHelper;
 import service.inputport.PedidoServiceInterface;
@@ -28,9 +29,10 @@ public class PedidoView {
 
         int idCliente = FormTypeValidator.intValidator("Ingrese el id del cliente");
         MetodoDePago metodoPago = SetPedidoHelper.getMetodoPago();
+        CanalVenta canalVenta = SetPedidoHelper.getCanalVenta();
         String observaciones = FormTypeValidator.stringValidator("Ingrese las observaciones");
 
-        Pedido pedido = pedidoService.createPedido(id, idCliente, metodoPago, observaciones);
+        Pedido pedido = pedidoService.createPedido(id, idCliente, metodoPago, canalVenta, observaciones);
 
         if (pedido == null) {
             System.out.println("No existe el cliente, primero registrelo");

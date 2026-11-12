@@ -15,6 +15,7 @@ Sistema de gestión de ventas, inventario y logística para la perfumería Magic
 
 - Java 11
 - Java Swing (interfaz gráfica)
+- MySQL en XAMPP + JDBC (mysql-connector-j)
 - IntelliJ IDEA
 - GitHub
 - Git
@@ -32,7 +33,10 @@ app/
 ├── config/                 -> Contexto: arma repositories, services y datos de prueba
 ├── domain/                 -> clases POJO
 │   └── enums/              -> enums del sistema
-├── repository/             -> implementacion de los repositorios (ArrayList en memoria)
+├── repository/             -> implementacion de los repositorios en memoria (ArrayList) y las capas de MySQL
+│   ├── database/           -> DataBaseConnectionMySql (Singleton: una sola conexion)
+│   ├── mapper/             -> RowMapper: convierte una fila de la base en un objeto
+│   └── mysql/              -> *RepositoryMySql: los SQL (INSERT, SELECT, UPDATE, DELETE)
 ├── service/                -> implementacion de los servicios
 │   ├── inputport/          -> interfaces de los servicios
 │   ├── outputport/         -> interfaces de los repositorios
@@ -60,7 +64,19 @@ VentanaPrincipal ──> PanelPedidos ──> PedidoServiceInterface ──> Ped
 UserInterface    ──> PedidoView   ──┘   (los dos usan el mismo service)
 ```
 
-Por eso las reglas de negocio (stock, total del pedido, plazo de 30 días de las devoluciones,
+El `PedidoRepositoryPort` lo implementan dos clases: `PedidoRepositoryImp` (ArrayList) y
+`PedidoRepositoryMySql` (base de datos). `config/Contexto` decide cuál se usa; los services no cambian.
+
+## Base de datos (XAMPP)
+
+1. Prender **MySQL** en el panel de XAMPP.
+2. En phpMyAdmin (http://localhost/phpmyadmin) importar `docs/database/magic_elixir_db.sql`.
+3. Agregar el driver al proyecto: `com.mysql:mysql-connector-j:9.7.0` (File > Project Structure > Libraries > From Maven).
+4. Ejecutar `Application.java`. Usuario de prueba: `admin@magicelixir.com` / `1234`.
+
+La guía completa paso a paso está en `docs/GUIA_PASO_A_PASO.md`.
+
+Las reglas de negocio (stock, total del pedido, plazo de 30 días de las devoluciones,
 proveedores activos, etc.) están en un solo lugar: los services.
 
 ## Pantallas
@@ -77,19 +93,23 @@ proveedores activos, etc.) están en un solo lugar: los services.
 | Inventario | HU-07 |
 | Pedidos | HU-08, HU-09, HU-10, HU-11, HU-12 |
 | Envíos | HU-13, HU-14 |
-| Devoluciones | HU-17, HU-19 |
+| Devoluciones | HU-17, HU-18, HU-19 |
+| Garantías | HU-20, HU-21 |
 | Proveedores | HU-15 |
 | Órdenes de compra | HU-16 |
+| Reportes (Ventas e indicadores) | HU-22, HU-23, HU-24 |
 
 ## Como ejecutar
 
-1. Abrir el proyecto en IntelliJ IDEA.
+1. Abrir el proyecto en IntelliJ IDEA (y dejar prendido MySQL en XAMPP, ver la sección anterior).
 2. Ejecutar `app/Application.java` para abrir la interfaz gráfica.
    (Para la versión por consola ejecutar `app/ApplicationConsola.java`).
 3. Iniciar sesion con el usuario de prueba:
    - Correo: `admin@magicelixir.com`
    - Contraseña: `1234`
 
-Al iniciar se cargan las 4 categorias, el catalogo de perfumes con 10 unidades de cada uno,
+Con la base de datos, esos datos de prueba vienen del script `docs/database/magic_elixir_db.sql`.
+Si MySQL no está prendido, el programa avisa y abre en modo de prueba (memoria) cargando:
+las 4 categorias, el catalogo de perfumes con 10 unidades de cada uno,
 clientes, empleados, proveedores y algunos pedidos, envíos, órdenes de compra y una devolución
 de prueba para que las pantallas no salgan vacías.
