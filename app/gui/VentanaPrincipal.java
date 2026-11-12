@@ -16,6 +16,7 @@ import gui.paneles.PanelClientes;
 import gui.paneles.PanelDevoluciones;
 import gui.paneles.PanelEmpleados;
 import gui.paneles.PanelEnvios;
+import gui.paneles.PanelGarantias;
 import gui.paneles.PanelInicio;
 import gui.paneles.PanelInventario;
 import gui.paneles.PanelModulo;
@@ -23,6 +24,7 @@ import gui.paneles.PanelOrdenesCompra;
 import gui.paneles.PanelPedidos;
 import gui.paneles.PanelPerfumes;
 import gui.paneles.PanelProveedores;
+import gui.paneles.PanelReportes;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -108,10 +110,14 @@ public class VentanaPrincipal extends JFrame {
         agregarPanel("envios", new PanelEnvios(this, contexto.getEnvioService(), contexto.getPedidoService()));
         agregarPanel("devoluciones", new PanelDevoluciones(this, contexto.getDevolucionService(),
                 contexto.getPedidoService(), contexto.getEnvioService()));
+        agregarPanel("garantias", new PanelGarantias(this, contexto.getGarantiaService()));
 
         // Abastecimiento
         agregarPanel("proveedores", new PanelProveedores(this, contexto.getProveedorService()));
         agregarPanel("ordenes", new PanelOrdenesCompra(this, contexto.getOrdenCompraService(), contexto.getProveedorService()));
+
+        // Reportes
+        agregarPanel("reportes", new PanelReportes(this, contexto.getReporteService()));
     }
 
     private void agregarPanel(String vista, PanelModulo panel) {
@@ -178,10 +184,14 @@ public class VentanaPrincipal extends JFrame {
         agregarOpcion(menu, "Pedidos", "pedidos");
         agregarOpcion(menu, "Envíos", "envios");
         agregarOpcion(menu, "Devoluciones", "devoluciones");
+        agregarOpcion(menu, "Garantías", "garantias");
 
         agregarSeccion(menu, "Abastecimiento");
         agregarOpcion(menu, "Proveedores", "proveedores");
         agregarOpcion(menu, "Órdenes de compra", "ordenes");
+
+        agregarSeccion(menu, "Reportes");
+        agregarOpcion(menu, "Ventas e indicadores", "reportes");
 
         // Si la pantalla es pequeña el menu se puede bajar con el scroll
         JScrollPane scroll = new JScrollPane(menu);
@@ -279,7 +289,7 @@ public class VentanaPrincipal extends JFrame {
 
     private void cerrarSesion() {
         boolean salir = DialogoConfirmar.mostrar(this, "¿Cerrar sesión?",
-                "Volverás a la pantalla de inicio. Los datos se conservan mientras el programa siga abierto.",
+                "Volverás a la pantalla de inicio de sesión.",
                 "Cerrar sesión");
         if (salir) {
             dispose();

@@ -5,6 +5,7 @@ import domain.DetallePedido;
 import domain.Inventario;
 import domain.Pedido;
 import domain.Perfume;
+import domain.enums.CanalVenta;
 import domain.enums.EstadoPedido;
 import domain.enums.MetodoDePago;
 import gui.VentanaPrincipal;
@@ -51,6 +52,7 @@ public class PanelPedidos extends PanelModulo {
     private final CampoTexto txtId = new CampoTexto("Ej: 4");
     private final Combo<Cliente> cbCliente = new Combo<>(cliente -> cliente.getNombre() + " " + cliente.getApellido());
     private final Combo<MetodoDePago> cbMetodoPago = new Combo<>(metodo -> metodo.getDescripcion());
+    private final Combo<CanalVenta> cbCanal = new Combo<>(canal -> canal.getDescripcion());
     private final Combo<EstadoPedido> cbEstado = new Combo<>(estado -> Formato.nombreEnum(estado));
     private final CampoTexto txtObservaciones = new CampoTexto("Ej: empacar para regalo, entregar en portería...");
 
@@ -71,9 +73,9 @@ public class PanelPedidos extends PanelModulo {
     private final Tabla tablaDetalle = new Tabla(new String[]{"#", "Perfume", "Cant", "Subtotal"});
     private final JLabel lblTotal = Estilo.titulo(Formato.dinero(0), 24f);
 
-    private final TarjetaFormulario formulario = new TarjetaFormulario("Datos del pedido", 6);
+    private final TarjetaFormulario formulario = new TarjetaFormulario("Datos del pedido", 7);
     private final TarjetaTabla listado = new TarjetaTabla("Pedidos", "Buscar cliente o estado...",
-            new String[]{"ID", "Fecha", "Cliente", "Total", "Estado"});
+            new String[]{"ID", "Fecha", "Cliente", "Canal", "Total", "Estado"});
 
     private int idSeleccionado = -1;
 
@@ -90,8 +92,8 @@ public class PanelPedidos extends PanelModulo {
         armarFormulario();
 
         Tabla tabla = listado.getTabla();
-        tabla.anchos(45, 100, 180, 110, 115);
-        tabla.columnaEstado(4);
+        tabla.anchos(45, 100, 160, 90, 100, 105);
+        tabla.columnaEstado(5);
         tabla.alSeleccionarFila(id -> cargarEnFormulario(id));
 
         // Abajo: la lista de pedidos y a la derecha el detalle del seleccionado
@@ -106,10 +108,12 @@ public class PanelPedidos extends PanelModulo {
     private void armarFormulario() {
         cbMetodoPago.cargar(Arrays.asList(MetodoDePago.values()));
         cbEstado.cargar(Arrays.asList(EstadoPedido.values()));
+        cbCanal.cargar(Arrays.asList(CanalVenta.values()));
 
         formulario.agregarCampo("ID pedido", txtId);
         formulario.agregarCampo("Cliente", cbCliente);
         formulario.agregarCampo("Método de pago", cbMetodoPago);
+        formulario.agregarCampo("Canal de venta", cbCanal);
         formulario.agregarCampo("Estado", cbEstado);
         formulario.agregarCampo("Observaciones", txtObservaciones, 2);
 
@@ -200,6 +204,7 @@ public class PanelPedidos extends PanelModulo {
                     pedido.getIdPedido(),
                     pedido.getFechaPedido(),
                     pedido.getCliente().getNombre() + " " + pedido.getCliente().getApellido(),
+                    pedido.getCanalVenta() == null ? "-" : pedido.getCanalVenta().getDescripcion(),
                     pedido.getTotalCostoPedido(),
                     Formato.nombreEnum(pedido.getEstadoPedido()));
         }
@@ -217,9 +222,10 @@ public class PanelPedidos extends PanelModulo {
             }
             Cliente cliente = ValidadorCampos.seleccion(cbCliente, "el cliente");
             MetodoDePago metodo = ValidadorCampos.seleccion(cbMetodoPago, "el método de pago");
+            CanalVenta canal = ValidadorCampos.seleccion(cbCanal, "el canal de venta");
             String observaciones = txtObservaciones.getTexto().isEmpty() ? "Sin observaciones" : txtObservaciones.getTexto();
 
-            Pedido pedido = pedidoService.createPedido(id, cliente.getIdUsuario(), metodo, observaciones);
+            Pedido pedido = pedidoService.createPedido(id, cliente.getIdUsuario(), metodo, canal, observaciones);
             if (pedido == null) {
                 mostrarError("No se pudo crear el pedido, revisa el cliente");
                 return;
@@ -320,6 +326,7 @@ public class PanelPedidos extends PanelModulo {
         txtId.setText(String.valueOf(pedido.getIdPedido()));
         cbCliente.seleccionar(pedido.getCliente());
         cbMetodoPago.setSelectedItem(pedido.getMetodoPago());
+        cbCanal.setSelectedItem(pedido.getCanalVenta());
         cbEstado.setSelectedItem(pedido.getEstadoPedido());
         txtObservaciones.setText(pedido.getObservaciones());
         quitarErrores(txtId, txtObservaciones, txtCantidad);
@@ -398,6 +405,7 @@ public class PanelPedidos extends PanelModulo {
             cbCliente.setSelectedIndex(0);
         }
         cbMetodoPago.setSelectedIndex(0);
+        cbCanal.setSelectedIndex(0);
         cbEstado.setSelectedItem(EstadoPedido.PENDIENTE);
 
         txtId.setText(String.valueOf(siguienteId()));
@@ -409,6 +417,7 @@ public class PanelPedidos extends PanelModulo {
     private void modoEdicion(boolean editando) {
         txtId.setBloqueado(editando);
         cbCliente.setBloqueado(editando);
+        cbCanal.setBloqueado(editando);
         // El estado se cambia solo con el boton "Cambiar estado" y cuando el pedido ya existe
         cbEstado.setBloqueado(!editando);
 

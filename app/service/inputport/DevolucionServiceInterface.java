@@ -14,6 +14,8 @@ public interface DevolucionServiceInterface {
     public List<Devolucion> selectAllDevoluciones();
     public Devolucion updateDevolucion(int idDevolucion, MotivoDevolucion motivo, String descripcion);
     public void deleteDevolucionById(int id);
+    public Devolucion aprobarDevolucion(int id);
+    public Devolucion rechazarDevolucion(int id);
     public Devolucion registrarReembolso(int id);
 
 }

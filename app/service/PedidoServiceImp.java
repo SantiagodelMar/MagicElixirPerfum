@@ -5,6 +5,7 @@ import domain.DetallePedido;
 import domain.Inventario;
 import domain.Pedido;
 import domain.Perfume;
+import domain.enums.CanalVenta;
 import domain.enums.EstadoPedido;
 import domain.enums.MetodoDePago;
 import service.helpers.SetInventarioHelper;
@@ -32,15 +33,15 @@ public class PedidoServiceImp implements PedidoServiceInterface {
         this.inventarioRepository = inventarioRepository;
     }
 
-    // HU-09 y HU-12: crear el pedido con el cliente y el metodo de pago
+    // HU-09 y HU-12: crear el pedido con el cliente y el metodo de pago (el canal es para el reporte HU-24)
     @Override
-    public Pedido createPedido(int idPedido, int idCliente, MetodoDePago metodoPago, String observaciones) {
+    public Pedido createPedido(int idPedido, int idCliente, MetodoDePago metodoPago, CanalVenta canalVenta, String observaciones) {
         Cliente cliente = clienteRepository.selectClienteById(idCliente);
         if (cliente == null) {
             return null;
         }
 
-        Pedido pedido = new Pedido(idPedido, LocalDate.now(), cliente, observaciones, EstadoPedido.PENDIENTE, metodoPago);
+        Pedido pedido = new Pedido(idPedido, LocalDate.now(), cliente, observaciones, EstadoPedido.PENDIENTE, metodoPago, canalVenta);
         return pedidoRepository.createPedido(pedido);
     }
 

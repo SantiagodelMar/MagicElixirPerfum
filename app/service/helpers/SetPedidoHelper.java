@@ -1,5 +1,6 @@
 package service.helpers;
 
+import domain.enums.CanalVenta;
 import domain.enums.EstadoPedido;
 import domain.enums.MetodoDePago;
 import service.validations.FormTypeValidator;
@@ -73,6 +74,35 @@ public class SetPedidoHelper {
         }
 
         return estado;
+    }
+
+    // HU-24: por que canal llego la venta
+    public static CanalVenta getCanalVenta() {
+        CanalVenta canal = null;
+
+        while (canal == null) {
+            System.out.println("Seleccione el canal de venta:");
+            System.out.println("1. Instagram");
+            System.out.println("2. WhatsApp");
+            System.out.println("3. Local fisico");
+            int opcion = FormTypeValidator.intValidator("Opcion: ");
+
+            switch (opcion) {
+                case 1:
+                    canal = CanalVenta.INSTAGRAM;
+                    break;
+                case 2:
+                    canal = CanalVenta.WHATSAPP;
+                    break;
+                case 3:
+                    canal = CanalVenta.LOCAL;
+                    break;
+                default:
+                    System.out.println("Opcion no valida, intente de nuevo");
+            }
+        }
+
+        return canal;
     }
 
 }

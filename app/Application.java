@@ -2,6 +2,7 @@ import config.Contexto;
 import gui.VentanaLogin;
 import gui.estilo.Estilo;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -16,8 +17,24 @@ public class Application {
         System.setProperty("awt.useSystemAAFontSettings", "on");
         System.setProperty("swing.aatext", "true");
 
-        // Un solo Contexto: repositories, services y datos de prueba
-        Contexto contexto = new Contexto();
+        // Si algo falla en la base de datos dentro de una ventana, se muestra el mensaje en vez de callarse
+        Thread.setDefaultUncaughtExceptionHandler((hilo, error) -> {
+            error.printStackTrace();
+            JOptionPane.showMessageDialog(null, error.getMessage(), "Magic Elixir Perfum", JOptionPane.ERROR_MESSAGE);
+        });
+
+        // Un solo Contexto: repositories y services. true = base de datos MySQL (XAMPP)
+        Contexto contexto;
+        try {
+            contexto = new Contexto(true);
+        } catch (RuntimeException e) {
+            // Red de seguridad para la presentacion: si XAMPP no esta prendido se avisa y se trabaja en memoria
+            JOptionPane.showMessageDialog(null,
+                    e.getMessage() + "\n\nSe abrira en modo de PRUEBA (memoria): los datos no se guardan.",
+                    "No hay conexion con la base de datos", JOptionPane.WARNING_MESSAGE);
+            contexto = new Contexto(false);
+        }
+        final Contexto contextoFinal = contexto;
 
         // Las ventanas de Swing siempre se crean en su propio hilo (invokeLater)
         SwingUtilities.invokeLater(() -> {
@@ -29,7 +46,7 @@ public class Application {
             }
             Estilo.aplicar();
 
-            VentanaLogin login = new VentanaLogin(contexto);
+            VentanaLogin login = new VentanaLogin(contextoFinal);
             login.setVisible(true);
         });
 

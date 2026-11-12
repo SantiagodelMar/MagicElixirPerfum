@@ -126,7 +126,7 @@ public class Estilo {
 
         if (texto.equals("activo") || texto.equals("disponible") || texto.equals("entregado")
                 || texto.equals("aprobada") || texto.equals("recibida") || texto.equals("reembolsada")
-                || texto.equals("pagado")) {
+                || texto.equals("pagado") || texto.equals("vigente")) {
             return new Color[]{VERDE, VERDE_FONDO};
         }
         if (texto.equals("bajo stock") || texto.equals("pendiente") || texto.equals("solicitada")
@@ -137,7 +137,7 @@ public class Estilo {
             return new Color[]{AZUL, AZUL_FONDO};
         }
         if (texto.equals("agotado") || texto.equals("inactivo") || texto.equals("cancelado")
-                || texto.equals("cancelada") || texto.equals("rechazada")) {
+                || texto.equals("cancelada") || texto.equals("rechazada") || texto.equals("vencida")) {
             return new Color[]{ROJO, ROJO_FONDO};
         }
         return new Color[]{GRIS, LIENZO};
