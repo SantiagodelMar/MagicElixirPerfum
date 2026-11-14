@@ -42,7 +42,7 @@ public class PanelInventario extends PanelModulo {
 
     public PanelInventario(VentanaPrincipal ventana, InventarioServiceInterface inventarioService,
                            PerfumeServiceInterface perfumeService) {
-        super(ventana, "Inventario  ·  HU-07", "Inventario",
+        super(ventana, "Catálogo", "Inventario",
                 "Unidades disponibles por perfume. Con 5 o menos queda en bajo stock y con 0 se marca agotado.");
         this.inventarioService = inventarioService;
         this.perfumeService = perfumeService;

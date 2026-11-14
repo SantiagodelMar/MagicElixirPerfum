@@ -48,7 +48,7 @@ public class PanelEmpleados extends PanelModulo {
     private int idSeleccionado = -1;
 
     public PanelEmpleados(VentanaPrincipal ventana, EmpleadoServiceInterface empleadoService) {
-        super(ventana, "Usuarios  ·  HU-01 y HU-02", "Empleados",
+        super(ventana, "Usuarios", "Empleados",
                 "Cuentas del personal que usa el sistema. Una cuenta desactivada no puede iniciar sesión.");
         this.empleadoService = empleadoService;
 

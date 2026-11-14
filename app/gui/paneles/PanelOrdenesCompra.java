@@ -46,7 +46,7 @@ public class PanelOrdenesCompra extends PanelModulo {
 
     public PanelOrdenesCompra(VentanaPrincipal ventana, OrdenCompraServiceInterface ordenCompraService,
                               ProveedorServiceInterface proveedorService) {
-        super(ventana, "Abastecimiento  ·  HU-16", "Órdenes de compra",
+        super(ventana, "Abastecimiento", "Órdenes de compra",
                 "Pedidos de mercancía a los proveedores. Toda orden empieza pendiente hasta que se aprueba y se recibe.");
         this.ordenCompraService = ordenCompraService;
         this.proveedorService = proveedorService;

@@ -51,7 +51,7 @@ app/
 │   ├── componentes/            -> botones, campos, tablas y tarjetas con el estilo de la marca
 │   ├── estilo/                 -> colores, fuentes y formatos ($ 240.000, fechas)
 │   └── validaciones/           -> ValidadorCampos (el FormTypeValidator de las ventanas)
-└── recursos/               -> logo y fuentes (Playfair Display e Inter)
+└── recursos/               -> logo, fuentes (Playfair Display e Inter) y fotos de los perfumes
 ```
 
 ## Cómo se conecta el front con el back
@@ -88,6 +88,7 @@ proveedores activos, etc.) están en un solo lugar: los services.
 | Clientes | HU-03 |
 | Empleados | HU-01, HU-02 |
 | Administradores | — |
+| Vitrina (catálogo con fotos) | HU-04, HU-06, HU-07 |
 | Categorías | HU-06 |
 | Perfumes | HU-04, HU-05, HU-06 |
 | Inventario | HU-07 |
@@ -98,6 +99,19 @@ proveedores activos, etc.) están en un solo lugar: los services.
 | Proveedores | HU-15 |
 | Órdenes de compra | HU-16 |
 | Reportes (Ventas e indicadores) | HU-22, HU-23, HU-24 |
+
+## Fotos de los perfumes
+
+La vitrina muestra una foto por perfume. Las fotos están en `app/recursos/img/perfumes`
+y se llaman con la marca y el nombre en minúscula, sin tildes y con guiones:
+
+```
+Lattafa + Khamrah Qahwa  ->  lattafa-khamrah-qahwa.png
+```
+
+Por ahora son ilustraciones del frasco con las iniciales del perfume. Para poner la foto
+real basta con guardarla (PNG, idealmente 300 x 375) con el mismo nombre.
+Si un perfume nuevo no tiene foto, se muestra `perfume-generico.png`.
 
 ## Como ejecutar
 

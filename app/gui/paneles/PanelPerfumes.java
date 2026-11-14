@@ -56,7 +56,7 @@ public class PanelPerfumes extends PanelModulo {
 
     public PanelPerfumes(VentanaPrincipal ventana, PerfumeServiceInterface perfumeService,
                          CategoriaServiceInterface categoriaService, InventarioServiceInterface inventarioService) {
-        super(ventana, "Catálogo  ·  HU-04, HU-05 y HU-06", "Perfumes",
+        super(ventana, "Catálogo", "Perfumes",
                 "El catálogo completo con precio, mililitros y notas olfativas de cada fragancia.");
         this.perfumeService = perfumeService;
         this.categoriaService = categoriaService;
@@ -273,11 +273,20 @@ public class PanelPerfumes extends PanelModulo {
 
         if (editando) {
             formulario.setModo(true, "Editando #" + idSeleccionado);
-            formulario.setNota("Si cambias el precio queda registrado como actualización de precio (HU-05).");
+            formulario.setNota("Si cambias el precio queda registrado como actualización de precio.");
         } else {
             formulario.setModo(false, "Nuevo perfume");
             formulario.setNota("Selecciona un perfume de la tabla para editarlo.");
         }
+    }
+
+    // Lo usa la vitrina: muestra todas las categorias, quita la busqueda y deja el perfume listo para editar
+    public void seleccionarPerfume(int idPerfume) {
+        if (cbFiltro.getItemCount() > 0) {
+            cbFiltro.setSelectedIndex(0);
+        }
+        listado.limpiarBusqueda();
+        listado.getTabla().seleccionarId(idPerfume);
     }
 
     private int siguienteId() {

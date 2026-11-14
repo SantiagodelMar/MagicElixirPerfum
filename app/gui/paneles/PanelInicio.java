@@ -1,18 +1,23 @@
 package gui.paneles;
 
 import domain.Categoria;
+import domain.DetallePedido;
 import domain.Inventario;
 import domain.Pedido;
+import domain.Perfume;
 import domain.enums.EstadoInventario;
 import domain.enums.EstadoPedido;
 import gui.VentanaPrincipal;
+import gui.componentes.BarraScroll;
 import gui.componentes.Boton;
+import gui.componentes.DialogoPerfume;
 import gui.componentes.EtiquetaEstado;
 import gui.componentes.GraficoBarras;
 import gui.componentes.PanelRedondo;
 import gui.componentes.TarjetaDato;
 import gui.estilo.Estilo;
 import gui.estilo.Formato;
+import gui.estilo.Recursos;
 import service.inputport.CategoriaServiceInterface;
 import service.inputport.InventarioServiceInterface;
 import service.inputport.PedidoServiceInterface;
@@ -25,7 +30,10 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -36,7 +44,9 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Pantalla de inicio: un resumen rapido de como va la perfumeria.
 public class PanelInicio extends PanelModulo {
@@ -54,6 +64,9 @@ public class PanelInicio extends PanelModulo {
     private final GraficoBarras grafico = new GraficoBarras();
     private final JPanel listaAlertas = crearLista();
     private final JPanel listaPedidos = crearLista();
+    private final JPanel filaMasVendidos = new JPanel(new GridLayout(1, 5, 12, 0));
+
+    private static final int CANTIDAD_MAS_VENDIDOS = 5;
 
     public PanelInicio(VentanaPrincipal ventana, PerfumeServiceInterface perfumeService,
                        CategoriaServiceInterface categoriaService, InventarioServiceInterface inventarioService,
@@ -79,17 +92,33 @@ public class PanelInicio extends PanelModulo {
         filaDetalle.add(crearTarjeta("Alertas de inventario", "Ver todo", "inventario", listaAlertas));
         filaDetalle.add(crearTarjeta("Últimos pedidos", "Ver todo", "pedidos", listaPedidos));
 
+        // Fila con la foto de los perfumes que mas se venden
+        filaMasVendidos.setOpaque(false);
+
+        JPanel abajo = new JPanel(new BorderLayout(0, 16));
+        abajo.setOpaque(false);
+        abajo.add(crearTarjeta("Lo más vendido", "Ver vitrina", "vitrina", filaMasVendidos), BorderLayout.NORTH);
+        abajo.add(crearAccesosRapidos(), BorderLayout.SOUTH);
+
         JPanel cuerpo = new JPanel(new BorderLayout(0, 16));
         cuerpo.setOpaque(false);
         cuerpo.add(filaDatos, BorderLayout.NORTH);
         cuerpo.add(filaDetalle, BorderLayout.CENTER);
-        cuerpo.add(crearAccesosRapidos(), BorderLayout.SOUTH);
+        cuerpo.add(abajo, BorderLayout.SOUTH);
 
         // En NORTH para que las tarjetas no se estiren hasta abajo y queden vacias
         JPanel envoltura = new JPanel(new BorderLayout());
-        envoltura.setOpaque(false);
+        envoltura.setBackground(Estilo.LIENZO);
+        envoltura.setBorder(BorderFactory.createEmptyBorder(0, 0, 4, 6));
         envoltura.add(cuerpo, BorderLayout.NORTH);
-        add(envoltura, BorderLayout.CENTER);
+
+        // Con scroll por si la pantalla del computador es pequeña
+        JScrollPane scroll = new JScrollPane(envoltura);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scroll.getVerticalScrollBar().setUnitIncrement(24);
+        scroll.getViewport().setBackground(Estilo.LIENZO);
+        BarraScroll.aplicar(scroll, Estilo.LIENZO, new Color(0xCF, 0xCB, 0xC4));
+        add(scroll, BorderLayout.CENTER);
     }
 
     @Override
@@ -102,6 +131,7 @@ public class PanelInicio extends PanelModulo {
         cargarGrafico();
         cargarAlertas();
         cargarUltimosPedidos();
+        cargarMasVendidos();
         revalidate();
         repaint();
     }
@@ -209,6 +239,105 @@ public class PanelInicio extends PanelModulo {
         }
     }
 
+    // Suma las unidades vendidas de cada perfume (pedidos pagados, enviados o entregados)
+    // y muestra los 5 que mas se venden con su foto
+    private void cargarMasVendidos() {
+        filaMasVendidos.removeAll();
+
+        Map<Integer, Integer> unidadesPorPerfume = new HashMap<>();
+        Map<Integer, Perfume> perfumesVendidos = new HashMap<>();
+        for (Pedido pedido : pedidoService.selectAllPedidos()) {
+            boolean vendido = pedido.getEstadoPedido() == EstadoPedido.PAGADO
+                    || pedido.getEstadoPedido() == EstadoPedido.ENVIADO
+                    || pedido.getEstadoPedido() == EstadoPedido.ENTREGADO;
+            if (!vendido || pedido.getDetalles() == null) {
+                continue;
+            }
+            for (DetallePedido detalle : pedido.getDetalles()) {
+                Perfume perfume = detalle.getPerfume();
+                if (perfume == null) {
+                    continue;
+                }
+                int id = perfume.getIdPerfume();
+                int antes = unidadesPorPerfume.containsKey(id) ? unidadesPorPerfume.get(id) : 0;
+                unidadesPorPerfume.put(id, antes + detalle.getCantidad());
+                perfumesVendidos.put(id, perfume);
+            }
+        }
+
+        List<Perfume> ranking = new ArrayList<>(perfumesVendidos.values());
+        ranking.sort((a, b) -> unidadesPorPerfume.get(b.getIdPerfume()) - unidadesPorPerfume.get(a.getIdPerfume()));
+
+        if (ranking.isEmpty()) {
+            filaMasVendidos.setLayout(new GridLayout(1, 1));
+            filaMasVendidos.add(textoVacio("Todavía no hay ventas pagadas."));
+            return;
+        }
+
+        filaMasVendidos.setLayout(new GridLayout(1, CANTIDAD_MAS_VENDIDOS, 12, 0));
+        for (int i = 0; i < ranking.size() && i < CANTIDAD_MAS_VENDIDOS; i++) {
+            Perfume perfume = ranking.get(i);
+            filaMasVendidos.add(crearMiniatura(perfume, unidadesPorPerfume.get(perfume.getIdPerfume()), i + 1));
+        }
+    }
+
+    // Cajita con la foto pequeña, el nombre y cuantas unidades se han vendido.
+    // Al hacer clic se abre la ficha del perfume.
+    private JPanel crearMiniatura(Perfume perfume, int unidades, int puesto) {
+        PanelRedondo caja = new PanelRedondo(new BorderLayout(12, 0), 14);
+        caja.setBackground(Estilo.LIENZO);
+        caja.setBorde(null);
+        caja.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 10));
+        caja.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        JLabel lblFoto = new JLabel(Recursos.fotoPerfume(perfume.getMarca(), perfume.getNombre(), 60, 75));
+
+        JPanel textos = new JPanel();
+        textos.setLayout(new BoxLayout(textos, BoxLayout.Y_AXIS));
+        textos.setOpaque(false);
+        JLabel lblPuesto = Estilo.micro("#" + puesto);
+        JLabel lblNombre = Estilo.texto(perfume.getNombre(), 13f, Estilo.TINTA);
+        lblNombre.setFont(Estilo.sansBold(13f));
+        JLabel lblMarca = Estilo.texto(perfume.getMarca(), 12f, Estilo.GRIS);
+        JLabel lblUnidades = Estilo.texto(unidades == 1 ? "1 vendido" : unidades + " vendidos", 12f, Estilo.GRIS);
+        lblPuesto.setAlignmentX(LEFT_ALIGNMENT);
+        lblNombre.setAlignmentX(LEFT_ALIGNMENT);
+        lblMarca.setAlignmentX(LEFT_ALIGNMENT);
+        lblUnidades.setAlignmentX(LEFT_ALIGNMENT);
+        textos.add(Box.createVerticalGlue());
+        textos.add(lblPuesto);
+        textos.add(Box.createVerticalStrut(3));
+        textos.add(lblNombre);
+        textos.add(lblMarca);
+        textos.add(Box.createVerticalStrut(3));
+        textos.add(lblUnidades);
+        textos.add(Box.createVerticalGlue());
+
+        caja.add(lblFoto, BorderLayout.WEST);
+        caja.add(textos, BorderLayout.CENTER);
+
+        caja.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                caja.setBorde(Estilo.TINTA);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                caja.setBorde(null);
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Inventario inventario = inventarioService.selectInventarioByPerfume(perfume.getIdPerfume());
+                if (DialogoPerfume.mostrar(PanelInicio.this, perfume, inventario)) {
+                    ventana.editarPerfume(perfume.getIdPerfume());
+                }
+            }
+        });
+        return caja;
+    }
+
     //Metodos para armar las tarjetas
 
     // Botones para ir directo a lo que mas se hace en el dia
@@ -221,6 +350,7 @@ public class PanelInicio extends PanelModulo {
 
         JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         botones.setOpaque(false);
+        botones.add(crearAcceso("Ver vitrina", "vitrina"));
         botones.add(crearAcceso("Registrar cliente", "clientes"));
         botones.add(crearAcceso("Nuevo envío", "envios"));
         botones.add(crearAcceso("Registrar devolución", "devoluciones"));

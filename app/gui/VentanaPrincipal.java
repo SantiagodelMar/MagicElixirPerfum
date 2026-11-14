@@ -25,6 +25,7 @@ import gui.paneles.PanelPedidos;
 import gui.paneles.PanelPerfumes;
 import gui.paneles.PanelProveedores;
 import gui.paneles.PanelReportes;
+import gui.paneles.PanelVitrina;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -99,6 +100,8 @@ public class VentanaPrincipal extends JFrame {
         agregarPanel("administradores", new PanelAdministradores(this, contexto.getAdministradorService()));
 
         // Catalogo e inventario
+        agregarPanel("vitrina", new PanelVitrina(this, contexto.getPerfumeService(), contexto.getCategoriaService(),
+                contexto.getInventarioService()));
         agregarPanel("categorias", new PanelCategorias(this, contexto.getCategoriaService(), contexto.getPerfumeService()));
         agregarPanel("perfumes", new PanelPerfumes(this, contexto.getPerfumeService(), contexto.getCategoriaService(),
                 contexto.getInventarioService()));
@@ -176,6 +179,7 @@ public class VentanaPrincipal extends JFrame {
         agregarOpcion(menu, "Administradores", "administradores");
 
         agregarSeccion(menu, "Catálogo");
+        agregarOpcion(menu, "Vitrina", "vitrina");
         agregarOpcion(menu, "Categorías", "categorias");
         agregarOpcion(menu, "Perfumes", "perfumes");
         agregarOpcion(menu, "Inventario", "inventario");
@@ -281,6 +285,13 @@ public class VentanaPrincipal extends JFrame {
 
     public void mostrarAviso(String mensaje, boolean exito) {
         aviso.mostrar(mensaje, exito, getLayeredPane().getWidth(), getLayeredPane().getHeight());
+    }
+
+    // Desde la vitrina se puede abrir un perfume para editarlo en la pantalla de Perfumes
+    public void editarPerfume(int idPerfume) {
+        mostrar("perfumes");
+        PanelPerfumes panelPerfumes = (PanelPerfumes) paneles.get("perfumes");
+        panelPerfumes.seleccionarPerfume(idPerfume);
     }
 
     public Empleado getEmpleadoActivo() {

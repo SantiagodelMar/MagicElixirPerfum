@@ -82,7 +82,7 @@ public class PanelPedidos extends PanelModulo {
     public PanelPedidos(VentanaPrincipal ventana, PedidoServiceInterface pedidoService,
                         ClienteServiceInterface clienteService, PerfumeServiceInterface perfumeService,
                         InventarioServiceInterface inventarioService) {
-        super(ventana, "Pedidos y pagos  ·  HU-08 a HU-12", "Pedidos",
+        super(ventana, "Ventas", "Pedidos",
                 "Crea el pedido, agrégale los perfumes y el sistema calcula el total y descuenta del inventario.");
         this.pedidoService = pedidoService;
         this.clienteService = clienteService;

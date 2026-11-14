@@ -41,7 +41,7 @@ public class PanelGarantias extends PanelModulo {
     private int idSeleccionado = -1;
 
     public PanelGarantias(VentanaPrincipal ventana, GarantiaServiceInterface garantiaService) {
-        super(ventana, "Post-venta y garantías  ·  HU-20 y HU-21", "Garantías",
+        super(ventana, "Ventas", "Garantías",
                 "Registra cuántos meses cubre la garantía de un pedido y consulta si todavía está vigente.");
         this.garantiaService = garantiaService;
 
