@@ -47,7 +47,7 @@ public class PanelClientes extends PanelModulo {
     private int idSeleccionado = -1;
 
     public PanelClientes(VentanaPrincipal ventana, ClienteServiceInterface clienteService) {
-        super(ventana, "Usuarios  ·  HU-03", "Clientes",
+        super(ventana, "Usuarios", "Clientes",
                 "Personas que compran por WhatsApp, Instagram, Facebook o directamente en el local.");
         this.clienteService = clienteService;
 

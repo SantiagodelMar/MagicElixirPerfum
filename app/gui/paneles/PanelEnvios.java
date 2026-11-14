@@ -54,7 +54,7 @@ public class PanelEnvios extends PanelModulo {
     private boolean cargando = false;
 
     public PanelEnvios(VentanaPrincipal ventana, EnvioServiceInterface envioService, PedidoServiceInterface pedidoService) {
-        super(ventana, "Logística Medellín  ·  HU-13 y HU-14", "Envíos",
+        super(ventana, "Ventas", "Envíos",
                 "Guías y transportadoras de cada pedido. Al marcar un envío como entregado el pedido también queda entregado.");
         this.envioService = envioService;
         this.pedidoService = pedidoService;

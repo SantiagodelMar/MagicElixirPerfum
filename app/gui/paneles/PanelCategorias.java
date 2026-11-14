@@ -37,7 +37,7 @@ public class PanelCategorias extends PanelModulo {
 
     public PanelCategorias(VentanaPrincipal ventana, CategoriaServiceInterface categoriaService,
                            PerfumeServiceInterface perfumeService) {
-        super(ventana, "Catálogo  ·  HU-06", "Categorías",
+        super(ventana, "Catálogo", "Categorías",
                 "Así se organiza el catálogo: perfumería femenina, masculina y árabe.");
         this.categoriaService = categoriaService;
         this.perfumeService = perfumeService;

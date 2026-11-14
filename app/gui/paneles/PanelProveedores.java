@@ -38,7 +38,7 @@ public class PanelProveedores extends PanelModulo {
     private int idSeleccionado = -1;
 
     public PanelProveedores(VentanaPrincipal ventana, ProveedorServiceInterface proveedorService) {
-        super(ventana, "Abastecimiento  ·  HU-15", "Proveedores",
+        super(ventana, "Abastecimiento", "Proveedores",
                 "Distribuidoras que le venden los perfumes a la tienda. Un proveedor inactivo no recibe órdenes de compra.");
         this.proveedorService = proveedorService;
 

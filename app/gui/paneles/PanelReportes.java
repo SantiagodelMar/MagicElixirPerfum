@@ -36,13 +36,13 @@ public class PanelReportes extends PanelModulo {
     private final TarjetaDato tarjetaPedidos = new TarjetaDato("Pedidos vendidos");
 
     private final TarjetaFormulario formulario = new TarjetaFormulario("Rango de fechas", 4);
-    private final TarjetaTabla listadoPerfumes = new TarjetaTabla("Perfumes más vendidos (top " + TOP_PERFUMES + ")",
+    private final TarjetaTabla listadoPerfumes = new TarjetaTabla("Top " + TOP_PERFUMES + " más vendidos",
             "Buscar perfume...", new String[]{"#", "Perfume", "Unidades", "Vendido"});
     private final TarjetaTabla listadoCanales = new TarjetaTabla("Ventas por canal", "Buscar canal...",
             new String[]{"#", "Canal", "Pedidos", "Vendido"});
 
     public PanelReportes(VentanaPrincipal ventana, ReporteServiceInterface reporteService) {
-        super(ventana, "Reportes e indicadores  ·  HU-22, HU-23 y HU-24", "Reportes",
+        super(ventana, "Reportes", "Reportes",
                 "Solo cuentan los pedidos pagados, enviados o entregados. Los pendientes y cancelados no suman.");
         this.reporteService = reporteService;
 
@@ -61,6 +61,9 @@ public class PanelReportes extends PanelModulo {
             consultar();
         });
 
+        // Las dos tablas comparten el ancho, por eso el buscador es mas angosto
+        listadoPerfumes.setAnchoBuscador(170);
+        listadoCanales.setAnchoBuscador(170);
         listadoPerfumes.getTabla().anchos(45, 260, 90, 120);
         listadoCanales.getTabla().anchos(45, 200, 90, 120);
 

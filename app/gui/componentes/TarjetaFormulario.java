@@ -13,6 +13,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 // Tarjeta blanca con los campos del formulario organizados en columnas
 // y los botones abajo a la derecha.
@@ -23,6 +25,8 @@ public class TarjetaFormulario extends PanelRedondo {
     private final JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
     private final EtiquetaEstado chipModo = new EtiquetaEstado("");
     private final JLabel lblNota = Estilo.texto("", 12.5f, Estilo.GRIS);
+    private final JPanel pie = new JPanel(new BorderLayout(0, 10));
+    private boolean notaArriba = false;
 
     // Posicion donde va el siguiente campo
     private int columnaActual = 0;
@@ -44,14 +48,19 @@ public class TarjetaFormulario extends PanelRedondo {
         campos.setOpaque(false);
         agregarRellenoDeColumnas();
 
-        // Pie: una nota a la izquierda y los botones a la derecha
-        JPanel pie = new JPanel(new BorderLayout());
+        // Pie: una nota a la izquierda y los botones a la derecha.
+        // Si hay muchos botones y la nota no cabe al lado, la nota pasa arriba de los botones.
         pie.setOpaque(false);
         botones.setOpaque(false);
-        // La nota va en el centro: si no cabe se corta con "..." y no se monta sobre los botones
         lblNota.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 16));
         pie.add(lblNota, BorderLayout.CENTER);
         pie.add(botones, BorderLayout.EAST);
+        pie.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                acomodarNota();
+            }
+        });
 
         add(encabezado, BorderLayout.NORTH);
         add(campos, BorderLayout.CENTER);
@@ -107,6 +116,24 @@ public class TarjetaFormulario extends PanelRedondo {
 
     public void setNota(String texto) {
         lblNota.setText(texto);
+        acomodarNota();
+    }
+
+    private void acomodarNota() {
+        int espacioLibre = pie.getWidth() - botones.getPreferredSize().width;
+        boolean cabeAlLado = pie.getWidth() == 0 || lblNota.getPreferredSize().width <= espacioLibre;
+
+        if (cabeAlLado && notaArriba) {
+            notaArriba = false;
+            pie.remove(lblNota);
+            pie.add(lblNota, BorderLayout.CENTER);
+            pie.revalidate();
+        } else if (!cabeAlLado && !notaArriba) {
+            notaArriba = true;
+            pie.remove(lblNota);
+            pie.add(lblNota, BorderLayout.NORTH);
+            pie.revalidate();
+        }
     }
 
     // Una fila invisible al final con una caja por columna.

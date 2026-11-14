@@ -63,6 +63,14 @@ public class CampoTexto extends JTextField {
         });
     }
 
+    // Despues de llenar el campo se muestra desde el principio del texto
+    // (si no, en los campos largos solo se veia el final)
+    @Override
+    public void setText(String texto) {
+        super.setText(texto);
+        setCaretPosition(0);
+    }
+
     public String getTexto() {
         return getText().trim();
     }

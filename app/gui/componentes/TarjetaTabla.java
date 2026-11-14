@@ -74,6 +74,18 @@ public class TarjetaTabla extends PanelRedondo {
         derecha.add(componente, 0);
     }
 
+    // Para las tarjetas angostas (ej: reportes) donde el buscador no cabe tan ancho
+    public void setAnchoBuscador(int ancho) {
+        txtBuscar.setPreferredSize(new Dimension(ancho, 36));
+    }
+
+    // Borra lo que se habia escrito en el buscador y vuelve a mostrar todas las filas
+    public void limpiarBusqueda() {
+        txtBuscar.limpiar();
+        tabla.filtrar("");
+        actualizarConteo();
+    }
+
     // Se llama despues de cargar los datos
     public void actualizarConteo() {
         int cantidad = tabla.getRowCount();

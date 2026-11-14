@@ -1,12 +1,18 @@
 package gui.estilo;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.font.TextAttribute;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 // Paleta de colores y tipografias de todo el sistema.
@@ -117,6 +123,54 @@ public class Estilo {
         etiqueta.setFont(sans(tamano));
         etiqueta.setForeground(color);
         return etiqueta;
+    }
+
+    // Parte un texto largo en varias lineas (un JLabel por linea) para que quepa en el ancho dado.
+    // Si no alcanza con maxLineas, la ultima linea termina en "...".
+    // Se usa para los nombres de los perfumes en la vitrina.
+    public static JPanel textoEnLineas(String texto, Font fuente, Color color, int ancho, int maxLineas) {
+        FontMetrics medidas = new JLabel().getFontMetrics(fuente);
+        String[] palabras = texto.split(" ");
+
+        List<String> lineas = new ArrayList<>();
+        String lineaActual = "";
+        for (String palabra : palabras) {
+            String prueba = lineaActual.isEmpty() ? palabra : lineaActual + " " + palabra;
+            if (medidas.stringWidth(prueba) <= ancho || lineaActual.isEmpty()) {
+                lineaActual = prueba;
+            } else {
+                lineas.add(lineaActual);
+                lineaActual = palabra;
+            }
+        }
+        lineas.add(lineaActual);
+
+        // Si sobran lineas se juntan en la ultima y se corta con "..."
+        if (lineas.size() > maxLineas) {
+            String ultima = lineas.get(maxLineas - 1);
+            for (int i = maxLineas; i < lineas.size(); i++) {
+                ultima = ultima + " " + lineas.get(i);
+            }
+            while (medidas.stringWidth(ultima + "...") > ancho && ultima.length() > 1) {
+                ultima = ultima.substring(0, ultima.length() - 1);
+            }
+            while (lineas.size() > maxLineas) {
+                lineas.remove(lineas.size() - 1);
+            }
+            lineas.set(maxLineas - 1, ultima.trim() + "...");
+        }
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setOpaque(false);
+        for (String linea : lineas) {
+            JLabel etiqueta = new JLabel(linea);
+            etiqueta.setFont(fuente);
+            etiqueta.setForeground(color);
+            etiqueta.setAlignmentX(Component.LEFT_ALIGNMENT);
+            panel.add(etiqueta);
+        }
+        return panel;
     }
 
     // Devuelve el color de texto y de fondo segun el estado que se muestra en las tablas.

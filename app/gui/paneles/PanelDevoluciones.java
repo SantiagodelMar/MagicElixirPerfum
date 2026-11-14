@@ -59,7 +59,7 @@ public class PanelDevoluciones extends PanelModulo {
 
     public PanelDevoluciones(VentanaPrincipal ventana, DevolucionServiceInterface devolucionService,
                              PedidoServiceInterface pedidoService, EnvioServiceInterface envioService) {
-        super(ventana, "Post-venta y garantías  ·  HU-17, HU-18 y HU-19", "Devoluciones",
+        super(ventana, "Ventas", "Devoluciones",
                 "Hasta 30 días después de la entrega. El administrador aprueba o rechaza. Arrepentimiento: 80%, daño o error: 100%.");
         this.devolucionService = devolucionService;
         this.pedidoService = pedidoService;
