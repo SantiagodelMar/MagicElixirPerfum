@@ -74,11 +74,6 @@ El `PedidoRepositoryPort` lo implementan dos clases: `PedidoRepositoryImp` (Arra
 3. Agregar el driver al proyecto: `com.mysql:mysql-connector-j:9.7.0` (File > Project Structure > Libraries > From Maven).
 4. Ejecutar `Application.java`. Usuario de prueba: `admin@magicelixir.com` / `1234`.
 
-La guía completa paso a paso está en `docs/GUIA_PASO_A_PASO.md`.
-
-Las reglas de negocio (stock, total del pedido, plazo de 30 días de las devoluciones,
-proveedores activos, etc.) están en un solo lugar: los services.
-
 ## Pantallas
 
 | Pantalla | Historias de usuario |
