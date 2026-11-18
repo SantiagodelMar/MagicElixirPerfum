@@ -7,7 +7,6 @@ Sistema de gestión de ventas, inventario y logística para la perfumería Magic
 - Juan Manuel Mira Janne
 - Aaron Mateo Ruiz (PO)
 - Anyi Paola Cañas Suaza (SM)
-- Feliciano Escobar
 - Harry Uran Molina
 - Santiago Rodríguez Marín
 
